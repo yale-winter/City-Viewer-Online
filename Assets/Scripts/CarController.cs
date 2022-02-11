@@ -14,14 +14,13 @@ public class CarController : MonoBehaviour
     public PathCreator carPC;
     private float noStoppingBeforeTime = float.PositiveInfinity;
     private float immuneToStopDur = 1.5F;
-    public List<EaserEase> eases = new List<EaserEase>();
 
-    public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC, List<EaserEase> setEases) {
+
+    public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC) {
         iD = setID;
         car = setCar;
         carModel = setModel;
         carPC = setPC;
-        eases = setEases;
         noStoppingBeforeTime = Time.time + immuneToStopDur;
     }
     public void ApproachIntersection(int intersectionID, string travelOK, float possibleWait)
@@ -37,6 +36,7 @@ public class CarController : MonoBehaviour
             }
             if (carDir != travelOK)
             {
+                car.GetComponent<PathFollower>().speed = 0.0F;
                 StartCoroutine(SlowDown(possibleWait));
             }
             Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
@@ -44,45 +44,7 @@ public class CarController : MonoBehaviour
     }
     private IEnumerator SlowDown(float waitAfter)
     {
-        float _t = 0.0F;
-        float initSpeed = carModel.maxSpeed;
-        float targetSpeed = 0.0F;
-        float useSpeed = initSpeed;
-
-        while (_t < 1.0F)
-        {
-            _t += Time.deltaTime * 1.2F;
-            useSpeed = Easer.Ease(eases[0], initSpeed, targetSpeed, _t);
-            if (_t > 1.0F)
-            {
-                _t = 1.0F;
-                useSpeed = targetSpeed;
-            }
-            car.GetComponent<PathFollower>().speed = useSpeed;
-            yield return new WaitForEndOfFrame();
-        }
         yield return new WaitForSeconds(waitAfter);
-        StartCoroutine(SpeedUp());
-    }
-    private IEnumerator SpeedUp()
-    {
-        float _t = 0.0F;
-        float initSpeed = 0.0F;
-        float targetSpeed = carModel.maxSpeed;
-        float useSpeed = 0.0F;
-
-        while (_t < 1.0F)
-        {
-            _t += Time.deltaTime;
-            useSpeed = Easer.Ease(eases[1], initSpeed, targetSpeed, _t);
-            if (_t > 1.0F)
-            {
-                _t = 1.0F;
-                useSpeed = targetSpeed;
-            }
-            car.GetComponent<PathFollower>().speed = useSpeed;
-            yield return new WaitForEndOfFrame();
-        }
         car.GetComponent<PathFollower>().speed = carModel.maxSpeed;
     }
 }

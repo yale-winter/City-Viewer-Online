@@ -9,7 +9,7 @@ public class CubeCity : MonoBehaviour
     // attributes of cube city
     public Vector2Int numBlocksXZ = new Vector2Int(3, 4);
     public Vector2 blockSizeXZ = new Vector2(20.0F, 10.0F);
-    private float stopLightDetectionSize = 4.0F;
+    private float stopLightDetectionSize = 2.0F;
     public Color[] bColors = new Color[5];
     public Color[] sLColors = new Color[4];
     public Material bulbMat;
@@ -33,7 +33,6 @@ public class CubeCity : MonoBehaviour
     public GameObject camCar;
     [SerializeField]
     public List<CarController> carControllers = new List<CarController>();
-    public List<EaserEase> eases = new List<EaserEase>();
 
 
 
@@ -197,7 +196,7 @@ public class CubeCity : MonoBehaviour
 
                     // car controller
                     CarController instanceCC = instanceCar.AddComponent<CarController>();
-                    instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, cPCScript, eases);
+                    instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, cPCScript);
                     carControllers.Add(instanceCC);
                 }
             }
