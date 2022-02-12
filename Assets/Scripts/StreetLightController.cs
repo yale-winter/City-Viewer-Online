@@ -16,8 +16,6 @@ public class StreetLightController : MonoBehaviour
     private float timeOfLastSwitch = float.PositiveInfinity;
     private float waitingDur = 0.0F;
 
-
-
     public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity)
     {
         iC = setIC;
@@ -108,13 +106,16 @@ public class StreetLightController : MonoBehaviour
     }
     public void CarApproaching(string carName)
     {
-        string travelOK = "x";
-        if (allowPassage == Allow.Z)
+        if (carName.Substring(0, 3) == "car")
         {
-            travelOK = "z";
+            string travelOK = "x";
+            if (allowPassage == Allow.Z)
+            {
+                travelOK = "z";
+            }
+            int carID = int.Parse(carName.Substring(4));
+            float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + UnityEngine.Random.Range(-0.25F, 0.25F);
+            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur);
         }
-        int carID = int.Parse(carName.Substring(4));
-        float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + UnityEngine.Random.Range(-0.25F, 0.25F);
-        cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur);
     }
 }

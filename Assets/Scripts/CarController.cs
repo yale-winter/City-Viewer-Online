@@ -39,12 +39,12 @@ public class CarController : MonoBehaviour
                 car.GetComponent<PathFollower>().speed = 0.0F;
                 StartCoroutine(SlowDown(possibleWait));
             }
-            Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
+           // Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
         }
     }
     private IEnumerator SlowDown(float waitAfter)
     {
         yield return new WaitForSeconds(waitAfter);
-        car.GetComponent<PathFollower>().speed = carModel.maxSpeed;
+        car.GetComponent<PathFollower>().speed = carModel.speed;
     }
 }

@@ -10,6 +10,8 @@ public class CubeCity : MonoBehaviour
     public Vector2Int numBlocksXZ = new Vector2Int(3, 4);
     public Vector2 blockSizeXZ = new Vector2(20.0F, 10.0F);
     private float stopLightDetectionSize = 2.0F;
+    public float helicoptersAvgPerBlock = 1.0F;
+    public float superSkyScrapersAvgPerBlock = 1.0F;
     public Color[] bColors = new Color[5];
     public Color[] sLColors = new Color[4];
     public Material bulbMat;
@@ -30,10 +32,16 @@ public class CubeCity : MonoBehaviour
     public GameObject signStopLight;
     // cars
     public GameObject car;
-    public GameObject camCar;
     [SerializeField]
     public List<CarController> carControllers = new List<CarController>();
+    public List<GameObject> superSkyScrapers = new List<GameObject>();
 
+    // helicopters
+    public Color[] bladeColors = new Color[5];
+    private Transform parentHelis;
+    public GameObject heli;
+    [SerializeField]
+    public List<HelicopterController> heliControllers = new List<HelicopterController>();
 
 
     void Start()
@@ -42,6 +50,9 @@ public class CubeCity : MonoBehaviour
         parentCubeCity.parent = transform;
         parentCars = new GameObject("Parent Cars").transform;
         parentCars.parent = transform;
+        parentHelis = new GameObject("Parent Helicopters").transform;
+        parentHelis.parent = transform;
+
         MakeCubeCity();
     }
     private void MakeCubeCity()
@@ -49,6 +60,7 @@ public class CubeCity : MonoBehaviour
         SpawnStopLights();
         Debug.Log("sLMatrix.Count " + sLMatrix.Count);
         SpawnCubeCity(new Vector2Int(0, 0));
+        StartCoroutine("AddHelicoptersSoon");
     }
     // spawn all the Stop Lights aka Intersections
     private void SpawnStopLights()
@@ -75,7 +87,7 @@ public class CubeCity : MonoBehaviour
             instanceSSL.transform.name = "Sign Street Light (" + iI + ")";
             instanceSSL.transform.parent = streetLights[iI].transform;
             instanceSSL.transform.localPosition = Vector3.zero;
-            instanceSSL.transform.position = new Vector3(instanceSSL.transform.position.x, instanceSSL.transform.position.y + 1.3F, instanceSSL.transform.position.z);
+            instanceSSL.transform.position = new Vector3(instanceSSL.transform.position.x, instanceSSL.transform.position.y + 1.4F, instanceSSL.transform.position.z);
             int thisIndex = streetLights.Count - 1;
             StreetLightModel instanceSLM = new StreetLightModel(thisIndex, xZPush[0], xZPush[1]);
             SignStopLightView instanceSSLV = instanceSSL.GetComponent<SignStopLightView>();
@@ -126,7 +138,7 @@ public class CubeCity : MonoBehaviour
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
                     Vector2 instanceSetSize = new Vector2(blockSizeXZ.x - roadBuffer, blockSizeXZ.y - roadBuffer);
                     //Debug.Log("instanceSetSize: " + instanceSetSize);
-                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, bColors, mat);
+                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, bColors, mat, this);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
                     Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
                     setInstancePos += new Vector3(blockSizeXZ[0] / 2.0F, 0.0F, blockSizeXZ[1] / -2.0F);
@@ -186,13 +198,16 @@ public class CubeCity : MonoBehaviour
                     cPCScript.bezierPath = newCarPath;
                     cPCScript.bezierPath.AutoControlLength = 0.01F;
 
-                    // car path follower
-                    PathFollower instancePF = instanceCar.AddComponent<PathFollower>();
-                    instancePF.pathCreator = cPCScript;
+
 
                     // car model
                     int instanceIndx = carControllers.Count;
-                    CarModel instanceCarModel = new CarModel(instanceIndx);
+                    CarModel instanceCarModel = new CarModel(instanceIndx, Random.Range(3.0F, 7.0F));
+
+                    // car path follower
+                    PathFollower instancePF = instanceCar.AddComponent<PathFollower>();
+                    instancePF.pathCreator = cPCScript;
+                    instancePF.speed = instanceCarModel.speed;
 
                     // car controller
                     CarController instanceCC = instanceCar.AddComponent<CarController>();
@@ -208,6 +223,91 @@ public class CubeCity : MonoBehaviour
                 sIndxAdjList[1]++;
             }
             SpawnCubeCity(sIndxAdjList);
+        }
+    }
+    private IEnumerator AddHelicoptersSoon()
+    {
+        yield return new WaitForSeconds(0.1F);
+        AddHelicopters();
+    }
+    [SerializeField]
+    private PathCreator pathPrefab;
+    private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
+    private void AddHelicopters()
+    {
+        Debug.Log(" 0 creating possible heli path superSkyScrapers.Count " + superSkyScrapers.Count);
+        for (int i = 0; i < superSkyScrapers.Count; i++)
+        {
+            Debug.Log(" 1 creating possible heli path");
+            for (int i2 = 0; i2 < superSkyScrapers[i].transform.childCount; i2++)
+            {
+                Debug.Log(" 2 creating possible heli path");
+                PathCreator path = Instantiate(pathPrefab, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
+                path.gameObject.transform.name = "heli path";
+                path.transform.parent = parentHelis;
+                instancePathPrefabs.Add(path);
+            }
+        }
+        // add wait here
+        SpawnHelicopters();
+    }
+    public void SpawnHelicopters()
+    {
+        int maxHelis = Mathf.RoundToInt(helicoptersAvgPerBlock * numBlocksXZ.x * numBlocksXZ.y);
+        if (maxHelis > 200)
+        {
+            maxHelis = 200;
+        }
+        int tries = 0;
+        
+        List<Vector3> pathPoints = new List<Vector3>();
+        pathPoints.Add(Vector3.zero);
+        pathPoints.Add(Vector3.one);
+        
+        while (heliControllers.Count < maxHelis && tries < 300)
+        {
+
+
+            // create helis
+            GameObject instanceHeli = Instantiate(heli);
+            instanceHeli.transform.parent = parentHelis;
+            instanceHeli.transform.name = "heli " + heliControllers.Count;
+
+            // heli path
+            /*
+            GameObject instanceCPC = new GameObject("HeliPathCreat " + heliControllers.Count);
+            instanceCPC.transform.parent = parentHelis;
+            PathCreator hPCScript = instanceCPC.AddComponent<PathCreator>();
+            BezierPath newHeliPath = new BezierPath(pathPoints);
+            hPCScript.bezierPath = newHeliPath;
+            hPCScript.bezierPath.AutoControlLength = 0.01F;
+            */
+
+            // heli path follower
+
+      
+            // heli model
+            int instanceIndx = heliControllers.Count;
+            HelicopterModel instanceHeliModel = new HelicopterModel(instanceIndx, Random.Range(4.0F,9.0F), 0.0F);
+
+            PathFollower instancePF = instanceHeli.AddComponent<PathFollower>();
+            instancePF.speed = instanceHeliModel.speed;
+            int pickPathInstance = heliControllers.Count;
+            while (pickPathInstance >= instancePathPrefabs.Count)
+            {
+                pickPathInstance -= instancePathPrefabs.Count;
+            }
+            instancePF.pathCreator = instancePathPrefabs[pickPathInstance];
+
+
+            // heli controller
+            HelicopterController instanceHC = instanceHeli.AddComponent<HelicopterController>();
+            HelicopterView instanceHelicopterView = instanceHeli.AddComponent<HelicopterView>();
+
+            instanceHC.SetUp(instanceHeliModel, instanceHelicopterView);
+            heliControllers.Add(instanceHC);
+
+            tries++;
         }
     }
 }
