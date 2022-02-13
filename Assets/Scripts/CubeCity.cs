@@ -243,6 +243,7 @@ public class CubeCity : MonoBehaviour
             {
                 Debug.Log(" 2 creating possible heli path");
                 PathCreator path = Instantiate(pathPrefab, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
+                path.bezierPath.GlobalNormalsAngle = 0.0F;
                 path.gameObject.transform.name = "heli path";
                 path.transform.parent = parentHelis;
                 instancePathPrefabs.Add(path);

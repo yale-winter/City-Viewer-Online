@@ -309,7 +309,7 @@ PrefabInstance:
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: pathPrefab
       value: 
-      objectReference: {fileID: 6503216594076396038, guid: 191b618fd45584f4aad6e6d5c8e042f0, type: 3}
+      objectReference: {fileID: 6298429020888398452, guid: 88fc5a8dcdb758548a9c34fe3acccdb9, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numBlocksXZ.x
       value: 3
