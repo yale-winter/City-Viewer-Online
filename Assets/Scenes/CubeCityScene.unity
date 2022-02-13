@@ -311,12 +311,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6298429020888398452, guid: 88fc5a8dcdb758548a9c34fe3acccdb9, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: pathPrefab1
+      value: 
+      objectReference: {fileID: 4907695402144431407, guid: cab6fe37e2a7b3145a240d5bd8305cc5, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: pathPrefab2
+      value: 
+      objectReference: {fileID: 6298429020888398452, guid: 88fc5a8dcdb758548a9c34fe3acccdb9, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: pathPrefab3
+      value: 
+      objectReference: {fileID: 369605036774913537, guid: e6ff932d3cba52f43b9dcc066bb4209b, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numBlocksXZ.x
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numBlocksXZ.y
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: bladeColors.Array.size

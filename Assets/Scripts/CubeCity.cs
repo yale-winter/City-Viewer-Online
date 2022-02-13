@@ -37,12 +37,19 @@ public class CubeCity : MonoBehaviour
     public List<GameObject> superSkyScrapers = new List<GameObject>();
 
     // helicopters
-    public Color[] bladeColors = new Color[5];
     private Transform parentHelis;
     public GameObject heli;
     [SerializeField]
     public List<HelicopterController> heliControllers = new List<HelicopterController>();
-
+    private PathCreator usePath;
+    [SerializeField]
+    private PathCreator pathPrefab1;
+    [SerializeField]
+    private PathCreator pathPrefab2;
+    [SerializeField]
+    private PathCreator pathPrefab3;
+    [SerializeField]
+    private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
 
     void Start()
     {
@@ -230,9 +237,7 @@ public class CubeCity : MonoBehaviour
         yield return new WaitForSeconds(0.1F);
         AddHelicopters();
     }
-    [SerializeField]
-    private PathCreator pathPrefab;
-    private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
+
     private void AddHelicopters()
     {
         Debug.Log(" 0 creating possible heli path superSkyScrapers.Count " + superSkyScrapers.Count);
@@ -242,7 +247,17 @@ public class CubeCity : MonoBehaviour
             for (int i2 = 0; i2 < superSkyScrapers[i].transform.childCount; i2++)
             {
                 Debug.Log(" 2 creating possible heli path");
-                PathCreator path = Instantiate(pathPrefab, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
+                int rollPath = Random.Range(0, 2);
+                usePath = pathPrefab1;
+                if (rollPath == 1)
+                {
+                    usePath = pathPrefab2;
+                }
+                else if (rollPath == 2)
+                {
+                    usePath = pathPrefab3;
+                }
+                PathCreator path = Instantiate(usePath, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
                 path.bezierPath.GlobalNormalsAngle = 0.0F;
                 path.gameObject.transform.name = "heli path";
                 path.transform.parent = parentHelis;

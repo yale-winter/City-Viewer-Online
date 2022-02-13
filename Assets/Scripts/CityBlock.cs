@@ -101,7 +101,8 @@ public class CityBlock : MonoBehaviour
                                 instanceHeliLoopGO.transform.localPosition = new Vector3(0.0F, yPos, 0.0F);
                                 instanceHeliLoopGO.transform.localScale = new Vector3(instanceHeliLoopGO.transform.localScale.x* moreXZ, instanceHeliLoopGO.transform.localScale.y*0.08F, instanceHeliLoopGO.transform.localScale.z* moreXZ);
                                 float noiseScale = Random.Range(0.0F, 3.5F);
-                                instanceHeliLoopGO.transform.localEulerAngles = new Vector3(Random.value* noiseScale - Random.value* noiseScale, Random.value* noiseScale - Random.value* noiseScale, Random.value* noiseScale - Random.value* noiseScale);
+                                float rotateFullyHere = Random.Range(0.0F, 360.0F);
+                                instanceHeliLoopGO.transform.localEulerAngles = new Vector3(Random.value* noiseScale - Random.value* noiseScale, rotateFullyHere, Random.value* noiseScale - Random.value* noiseScale);
                                 
 
                                 heliPathRefGOs.Add(instanceHeliLoopGO.transform);
