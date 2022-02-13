@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
 using PathCreation.Examples;
+using UnityEngine.UI;
 
 public class CubeCity : MonoBehaviour
 {
     // attributes of cube city
-    public Vector2Int numBlocksXZ = new Vector2Int(3, 4);
-    public Vector2 blockSizeXZ = new Vector2(20.0F, 10.0F);
+    public Vector2Int numCityBlocksXZ = new Vector2Int(3, 4);
+    public Vector2 cityBlockSizeXZ = new Vector2(20.0F, 10.0F);
     private float stopLightDetectionSize = 2.0F;
     public float helicoptersAvgPerBlock = 1.0F;
     public float superSkyScrapersAvgPerBlock = 1.0F;
@@ -21,6 +22,10 @@ public class CubeCity : MonoBehaviour
     public Material roadMat;
 
     // objects of cube city
+    public Transform cameraTarget;
+    public Transform camP;
+    public Vector2Int camViewCurMax = new Vector2Int(0,2);
+    public List<Vector3> cameraSettings = new List<Vector3>();
     private Transform parentCubeCity;
     private Transform parentCars;
     private Transform parentHeliPaths;
@@ -48,9 +53,11 @@ public class CubeCity : MonoBehaviour
     private PathCreator usePath;
     private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
     public GameObject pathDetCheckPrefab;
+    public GameObject displayText;
 
     void Start()
     {
+        
         parentCubeCity = new GameObject("Parent Cube City").transform;
         parentCubeCity.parent = transform;
         parentCars = new GameObject("Parent Cars").transform;
@@ -61,6 +68,9 @@ public class CubeCity : MonoBehaviour
         parentHelis.parent = transform;
         parentHeliPaths = new GameObject("Parent Heli Paths").transform;
         parentHeliPaths.parent = transform;
+        cameraTarget = new GameObject("Camera Target").transform;
+        cameraTarget.position = new Vector3(((float)numCityBlocksXZ.x * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) *-0.9F);
+        camP.position = cameraTarget.position;
         MakeCubeCity();
     }
     private void MakeCubeCity()
@@ -75,7 +85,7 @@ public class CubeCity : MonoBehaviour
     {
         Vector2Int onColRow = new Vector2Int(0, 0);
         Vector2 xZPush = new Vector2(0.0F, 0.0F);
-        while (streetLights.Count < numBlocksXZ[0] * numBlocksXZ[1])
+        while (streetLights.Count < numCityBlocksXZ[0] * numCityBlocksXZ[1])
         {
             streetLights.Add(GameObject.CreatePrimitive(PrimitiveType.Cube));
             int iI = streetLights.Count - 1;
@@ -111,19 +121,19 @@ public class CubeCity : MonoBehaviour
             sLMatrix[onColRow[0]].inRow.Add(instanceSLC);
 
             onColRow[0]++;
-            xZPush[0] += blockSizeXZ[0];
-            if (onColRow[0] > numBlocksXZ[0] - 1)
+            xZPush[0] += cityBlockSizeXZ[0];
+            if (onColRow[0] > numCityBlocksXZ[0] - 1)
             {
                 onColRow[0] = 0;
                 onColRow[1]++;
                 xZPush[0] = 0.0F;
-                xZPush[1] -= blockSizeXZ[1];
+                xZPush[1] -= cityBlockSizeXZ[1];
             }
         }
     }
     private void SpawnCubeCity(Vector2Int sIndxAdjList)
     {
-        if (sIndxAdjList[1] < numBlocksXZ[1]) {
+        if (sIndxAdjList[1] < numCityBlocksXZ[1]) {
             //Debug.Log("looking to spawn city block at " + sIndxAdjList);
             // need to spawn cube city here? check the location to the right bottom
             Vector2Int botRightXZ = new Vector2Int(sIndxAdjList[0] + 1, sIndxAdjList[1] + 1);
@@ -144,12 +154,12 @@ public class CubeCity : MonoBehaviour
                     // create city block's buildings - - - - - - - - - - -
                     GameObject instanceCityBlockGO = new GameObject("Parent City Block");
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
-                    Vector2 instanceSetSize = new Vector2(blockSizeXZ.x - roadBuffer, blockSizeXZ.y - roadBuffer);
+                    Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
                     //Debug.Log("instanceSetSize: " + instanceSetSize);
                     instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, bColors, mat, this);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
                     Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
-                    setInstancePos += new Vector3(blockSizeXZ[0] / 2.0F, 0.0F, blockSizeXZ[1] / -2.0F);
+                    setInstancePos += new Vector3(cityBlockSizeXZ[0] / 2.0F, 0.0F, cityBlockSizeXZ[1] / -2.0F);
                     instanceCityBlockGO.transform.position = setInstancePos;
 
                     // create road ring around the block - - - - - - - -
@@ -165,15 +175,15 @@ public class CubeCity : MonoBehaviour
                     pathPoints.Add(Vector3.zero);
                     if (clockWisePath)
                     {
-                        pathPoints.Add(new Vector3(blockSizeXZ.x, 0.0F, 0.0F));
-                        pathPoints.Add(new Vector3(blockSizeXZ.x, 0.0F, blockSizeXZ.y * -1.0F));
-                        pathPoints.Add(new Vector3(0.0F, 0.0F, blockSizeXZ.y * -1.0F));
+                        pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, 0.0F));
+                        pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, cityBlockSizeXZ.y * -1.0F));
+                        pathPoints.Add(new Vector3(0.0F, 0.0F, cityBlockSizeXZ.y * -1.0F));
                     }
                     else
                     {
-                        pathPoints.Add(new Vector3(0.0F, 0.0F, blockSizeXZ.y * -1.0F));
-                        pathPoints.Add(new Vector3(blockSizeXZ.x, 0.0F, blockSizeXZ.y * -1.0F));
-                        pathPoints.Add(new Vector3(blockSizeXZ.x, 0.0F, 0.0F));
+                        pathPoints.Add(new Vector3(0.0F, 0.0F, cityBlockSizeXZ.y * -1.0F));
+                        pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, cityBlockSizeXZ.y * -1.0F));
+                        pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, 0.0F));
                     }
                         pathPoints.Add(Vector3.zero);
                     for (int i = 0; i < pathPoints.Count; i++)
@@ -225,7 +235,7 @@ public class CubeCity : MonoBehaviour
             }
 
             sIndxAdjList[0]++;
-            if (sIndxAdjList[0] >= numBlocksXZ[0])
+            if (sIndxAdjList[0] >= numCityBlocksXZ[0])
             {
                 sIndxAdjList[0] = 0;
                 sIndxAdjList[1]++;
@@ -236,7 +246,7 @@ public class CubeCity : MonoBehaviour
     private IEnumerator AddHelicoptersSoon()
     {
         yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(0.01F);
+        //yield return new WaitForSeconds(0.01F);
         if (superSkyScrapers.Count > 0)
         {
             AddHelicopters();
@@ -257,7 +267,7 @@ public class CubeCity : MonoBehaviour
                     path.transform.parent = parentHeliPaths;
                     instancePathPrefabs.Add(path);
 
-                    // path detection (should not get too near any super sky scrapers ordestroy the path)
+                    // path detection (should not get too near any super sky scrapers or destroy the path)
                     
                     GameObject pathDetection = new GameObject("Path Detection");
                     
@@ -276,7 +286,7 @@ public class CubeCity : MonoBehaviour
     private IEnumerator SpawnHelicoptersSoon()
     {
         yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(0.02F);
+        //yield return new WaitForSeconds(0.02F);
         if (parentHeliPaths.childCount > 0)
         {
             SpawnHelicopters();
@@ -284,7 +294,7 @@ public class CubeCity : MonoBehaviour
     }
     public void SpawnHelicopters()
     {
-        int maxHelis = Mathf.RoundToInt(helicoptersAvgPerBlock * numBlocksXZ.x * numBlocksXZ.y);
+        int maxHelis = Mathf.RoundToInt(helicoptersAvgPerBlock * numCityBlocksXZ.x * numCityBlocksXZ.y);
         if (maxHelis > 200)
         {
             maxHelis = 200;
@@ -331,5 +341,57 @@ public class CubeCity : MonoBehaviour
 
             tries++;
         }
+    }
+    public void SwitchViewPressed()
+    {
+        string instanceStr = "";
+        camViewCurMax.x++;
+        if (camViewCurMax.x > camViewCurMax.y)
+        {
+            camViewCurMax.x = 0;
+        }
+        if (camViewCurMax.x == 0)
+        {
+            instanceStr = "City View";
+            cameraTarget.parent = null;
+            cameraTarget.position = new Vector3(((float)numCityBlocksXZ.x * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9F);
+            cameraTarget.localRotation = Quaternion.identity;
+            camP.parent = null;
+            camP.position = cameraTarget.position;
+            camP.localRotation = Quaternion.identity;
+            camP.GetChild(0).localPosition = new Vector3(0.0F, cameraSettings[0].x, cameraSettings[0].y);
+            camP.GetChild(0).localEulerAngles = new Vector3(cameraSettings[0].z, 0.0F, 0.0F);
+        }
+        else if (camViewCurMax.x == 1)
+        {
+            
+            int chooseHeli = Random.Range(0, parentHelis.childCount -1);
+            cameraTarget.parent = parentHelis.GetChild(chooseHeli);
+            cameraTarget.localPosition = Vector3.zero;
+            cameraTarget.localRotation = Quaternion.identity;
+            camP.parent = cameraTarget;
+            camP.localPosition = Vector3.zero;
+            camP.localRotation = Quaternion.identity;
+            camP.localEulerAngles = new Vector3(0.0F, 0.0F, 90.0F);
+            camP.GetChild(0).localPosition = new Vector3(0.0F, cameraSettings[1].x, cameraSettings[1].y);
+            camP.GetChild(0).localEulerAngles = new Vector3(cameraSettings[1].z, 0.0F, 0.0F);
+            instanceStr = "Heli (" + chooseHeli + ") View";
+        }
+        else if (camViewCurMax.x == 2)
+        {
+            int chooseCar = Random.Range(0, parentCars.childCount - 1);
+            instanceStr = "Car (" + chooseCar + ") View";
+            cameraTarget.parent = parentCars.GetChild(chooseCar);
+            cameraTarget.localPosition = Vector3.zero;
+            cameraTarget.localRotation = Quaternion.identity;
+            camP.parent = cameraTarget;
+            camP.localPosition = Vector3.zero;
+            camP.localRotation = Quaternion.identity;
+            camP.localEulerAngles = new Vector3(0.0F, 0.0F, 90.0F);
+            camP.GetChild(0).localPosition = new Vector3(0.0F, cameraSettings[2].x, cameraSettings[2].y);
+            camP.GetChild(0).localEulerAngles = new Vector3(cameraSettings[2].z, 0.0F, 0.0F);
+        }
+
+        displayText.GetComponent<Text>().text = instanceStr;
     }
 }

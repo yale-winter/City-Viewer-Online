@@ -71,7 +71,7 @@ public class CityBlock : MonoBehaviour
                     buildingHeight = Random.Range(5.0F, 10.0F);
                 }
 
-                int totalBlocks = Mathf.RoundToInt(cubeCity.blockSizeXZ.x * cubeCity.blockSizeXZ.y);
+                int totalBlocks = Mathf.RoundToInt(cubeCity.cityBlockSizeXZ.x * cubeCity.cityBlockSizeXZ.y);
 
                 if (sSSHere.Count < 1 && curX + superSkyWidth < endX && length >= buildingLengthMinMax.y*0.5F) {
                     if (cubeCity.superSkyScrapers.Count < Mathf.FloorToInt(cubeCity.superSkyScrapersAvgPerBlock * totalBlocks))

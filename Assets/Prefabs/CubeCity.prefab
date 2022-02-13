@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5213971678201042961}
-  - component: {fileID: 5213971678201042962}
-  - component: {fileID: 5213971678201042963}
   - component: {fileID: 5213971678201042960}
   m_Layer: 0
   m_Name: CubeCity
@@ -33,55 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5213971678201042962
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5213971678201042972}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5213971678201042963
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5213971678201042972}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &5213971678201042960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,8 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a096f5ceccaca14ebc404ac693eac25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBlocksXZ: {x: 10, y: 10}
-  blockSizeXZ: {x: 20, y: 10}
+  numCityBlocksXZ: {x: 10, y: 10}
+  cityBlockSizeXZ: {x: 20, y: 10}
+  helicoptersAvgPerBlock: 0.5
+  superSkyScrapersAvgPerBlock: 0.4
   bColors:
   - {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
   - {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
@@ -112,11 +63,25 @@ MonoBehaviour:
   maxBuildingsInBlock: 250
   roadBuffer: 2
   roadMat: {fileID: 2100000, guid: 926169f93d84fab418128d90c1f2ce6b, type: 2}
+  cameraTarget: {fileID: 0}
+  camP: {fileID: 0}
+  camViewCurMax: {x: 0, y: 2}
+  cameraSettings:
+  - {x: 3, y: -3, z: 45}
+  - {x: 8, y: -8, z: 45}
+  - {x: 2, y: -3, z: 20}
   sLMatrix: []
   streetLights: []
   streetLightControllers: []
   signStopLight: {fileID: 4314735544866060672, guid: bf5c23c191dbc7f41af128c23febdf60, type: 3}
   car: {fileID: 8015500891632532318, guid: a39f316286ef64f4fb0d08a6ca4f0bc3, type: 3}
   carControllers: []
+  superSkyScrapers: []
   heli: {fileID: 5586105520560356314, guid: 8cae142247d74b04ca78d87de61de532, type: 3}
   heliControllers: []
+  heliPaths:
+  - {fileID: 6712774241677132967, guid: cab6fe37e2a7b3145a240d5bd8305cc5, type: 3}
+  - {fileID: 5646301990716457980, guid: 88fc5a8dcdb758548a9c34fe3acccdb9, type: 3}
+  - {fileID: 2022727280606171017, guid: e6ff932d3cba52f43b9dcc066bb4209b, type: 3}
+  pathDetCheckPrefab: {fileID: 6069671225471395440, guid: 05957b36299c8884787db6749bb92f4e, type: 3}
+  displayText: {fileID: 0}
