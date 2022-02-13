@@ -96,7 +96,7 @@ public class CityBlock : MonoBehaviour
 
                                 instanceHeliLoopGO.transform.parent = building;
                                 instanceHeliLoopGO.transform.name = "possible heli loop";
-                                float yPos = Random.Range(0.1F, 0.5F);
+                                float yPos = Random.Range(0.1F, 0.7F);
                                 float moreXZ = Random.Range(5.1F, 5.3F);
                                 instanceHeliLoopGO.transform.localPosition = new Vector3(0.0F, yPos, 0.0F);
                                 instanceHeliLoopGO.transform.localScale = new Vector3(instanceHeliLoopGO.transform.localScale.x* moreXZ, instanceHeliLoopGO.transform.localScale.y*0.08F, instanceHeliLoopGO.transform.localScale.z* moreXZ);

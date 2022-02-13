@@ -11,8 +11,13 @@ namespace PathCreation.Examples {
         public float spacing = 3;
 
         const float minSpacing = .1f;
-
-        void Generate () {
+        private void Start()
+        {
+            Generate();
+        }
+        public void Generate () {
+            //if (pathCreator == null)
+            //   pathCreator = transform.parent.GetComponent<PathCreator>();
             if (pathCreator != null && prefab != null && holder != null) {
                 DestroyObjects ();
 
@@ -38,6 +43,8 @@ namespace PathCreation.Examples {
         }
 
         protected override void PathUpdated () {
+            //if (pathCreator == null)
+            //    pathCreator = transform.parent.GetComponent<PathCreator>();
             if (pathCreator != null) {
                 Generate ();
             }

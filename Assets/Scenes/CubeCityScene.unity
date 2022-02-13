@@ -324,12 +324,16 @@ PrefabInstance:
       objectReference: {fileID: 369605036774913537, guid: e6ff932d3cba52f43b9dcc066bb4209b, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numBlocksXZ.x
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numBlocksXZ.y
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: pathDetCheckPrefab
+      value: 
+      objectReference: {fileID: 6069671225471395440, guid: 05957b36299c8884787db6749bb92f4e, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: bladeColors.Array.size
       value: 5
@@ -338,6 +342,18 @@ PrefabInstance:
       propertyPath: helicoptersAvgPerBlock
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: heliPaths.Array.data[0]
+      value: 
+      objectReference: {fileID: 6712774241677132967, guid: cab6fe37e2a7b3145a240d5bd8305cc5, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: heliPaths.Array.data[1]
+      value: 
+      objectReference: {fileID: 5646301990716457980, guid: 88fc5a8dcdb758548a9c34fe3acccdb9, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: heliPaths.Array.data[2]
+      value: 
+      objectReference: {fileID: 2022727280606171017, guid: e6ff932d3cba52f43b9dcc066bb4209b, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: bladeColors.Array.data[0].a
       value: 0.41568628
