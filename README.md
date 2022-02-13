@@ -6,6 +6,6 @@ C# Unity3D - Cube City
 ![cubecity4](https://user-images.githubusercontent.com/5803874/153745299-f10ac4f5-e3ea-4cf4-adc4-ee6ab65dbe4b.jpg)
 ![cubecity3](https://user-images.githubusercontent.com/5803874/153745295-cf845d52-ca0b-4f7f-98ab-529a4533470f.jpg)
 
-Project Goal: Procedurally generate Cube City with manhattan style skyscrapers, roads, cars, stoplights, and helicopters of "ANY SIZE"!
+Project Overview: Procedurally generate Cube City with manhattan style skyscrapers, roads, cars, stoplights, and helicopters of "ANY SIZE"!
 
-Uses MVC controller pattern. Just one object with one script (CubeCity.cs) needed in scene. Dynamically set city attributes such as number of blocks in X, Z. Size of city blocks in X, Z. Avg number of Helicopters per block, Avg number of super Skyscrapers per block, etc. Helicopter paths are checked to see if they fly through buildings. Cars stop at stoplights with waiting coroutines getting delay info from stoplight, no OnUpdate functions. Switch between 3 different camera views to see the city or follow around helicopters or cars. 
+Uses mostly MVC pattern (with the Models not using UnityEngine), some command pattern, observer pattern, and recursive elements. Just one object with one script (CubeCity.cs) needed in scene. The Developer can dynamically set city attributes such as number of blocks in X, Z. Size of city blocks in X, Z. Avg number of Helicopters per block, Avg number of Super Skyscrapers per block, etc. Helicopter paths are checked to see if they fly through buildings. Cars stop at stoplights with waiting coroutines getting delay info from stoplight, no OnUpdate functions. Switch between 3 different camera views to see the city, follow helicopters, or follow cars. 
