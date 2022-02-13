@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-
 public class HelicopterModel
 {
     public int iD = -1;

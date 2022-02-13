@@ -76,7 +76,6 @@ public class CubeCity : MonoBehaviour
     private void MakeCubeCity()
     {
         SpawnStopLights();
-        Debug.Log("sLMatrix.Count " + sLMatrix.Count);
         SpawnCubeCity(new Vector2Int(0, 0));
         StartCoroutine("AddHelicoptersSoon");
     }
