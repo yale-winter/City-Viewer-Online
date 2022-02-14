@@ -7,18 +7,22 @@ using UnityEngine.UI;
 
 public class CubeCity : MonoBehaviour
 {
-    // attributes of cube city
+    [Tooltip("number of city blocks to use in X and Z")]
     public Vector2Int numCityBlocksXZ = new Vector2Int(3, 4);
+    [Tooltip("size of each city blocks in X and Z")]
     public Vector2 cityBlockSizeXZ = new Vector2(20.0F, 10.0F);
     private float stopLightDetectionSize = 2.0F;
+    [Tooltip("average number of helicopters to spawn per city block (numCityBlocksXZ.x * numCityBlocksXZ.y)")]
     public float helicoptersAvgPerBlock = 1.0F;
+    [Tooltip("average number of super skyscrapers to spawn per city block (numCityBlocksXZ.x * numCityBlocksXZ.y)")]
     public float superSkyScrapersAvgPerBlock = 1.0F;
     public Color[] bColors = new Color[5];
     public Color[] sLColors = new Color[4];
     public Material bulbMat;
     public Material mat;
-    public int maxBuildingsInBlock = 250;
-    public float roadBuffer = 8.0F;
+    private int maxBuildingsInBlock = 250;
+    [Tooltip("distance to give space for roads inbetween city blocks")]
+    private float roadBuffer = 2.0F;
     public Material roadMat;
 
     // objects of cube city
@@ -31,6 +35,7 @@ public class CubeCity : MonoBehaviour
     private Transform parentHeliPaths;
     private Transform parentCarPaths;
     // street lights / intersections
+    [Tooltip("matrix of street lights / intersections to see if another spot is adjacent")]
     [SerializeField]
     private List<inCol> sLMatrix = new List<inCol>();
     public List<GameObject> streetLights = new List<GameObject>();
@@ -48,7 +53,6 @@ public class CubeCity : MonoBehaviour
     public GameObject heli;
     [SerializeField]
     public List<HelicopterController> heliControllers = new List<HelicopterController>();
-
     public GameObject[] heliPaths = new GameObject[3];
     private PathCreator usePath;
     private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
@@ -57,7 +61,6 @@ public class CubeCity : MonoBehaviour
 
     void Start()
     {
-        
         parentCubeCity = new GameObject("Parent Cube City").transform;
         parentCubeCity.parent = transform;
         parentCars = new GameObject("Parent Cars").transform;

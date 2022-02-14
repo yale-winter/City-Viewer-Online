@@ -16,11 +16,14 @@ public class CityBlock : MonoBehaviour
     private Vector2 buildingLengthMinMax = new Vector2(1.0F, 6.0F);
     public Vector2 blockSize = new Vector2(10.0F,10.0F);
     public Material mat;
+    [Tooltip("rotation noise for helicopter path start objects")]
     public float noiseStrength = 0.25F;
     public Color[] cols = new Color[5];
     public CubeCity cubeCity;
+    [Tooltip("super skyscrapers here")]
     public List<GameObject> sSSHere = new List<GameObject>();
     private float superSkyWidth = 4.0F;
+    [Tooltip("helicopter path start objects")]
     public List<Transform> heliPathRefGOs = new List<Transform>();
 
     public void SetUp(int maxBuildings, Vector2 instanceSize, Color[] setCols, Material setMat, CubeCity setCubeCity)

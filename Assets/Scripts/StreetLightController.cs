@@ -8,6 +8,7 @@ public class StreetLightController : MonoBehaviour
     public SignStopLightView sSLV;
     public StreetLightModel sLM;
     public Allow allowPassage = Allow.X;
+    [Tooltip("delay to switch the lights")]
     private Vector2 delayMinMax = new Vector2(4.0F,10.0F);
     private float yellowLightDelay = 2.0F;
     private Color[] sLColors = new Color[4];
