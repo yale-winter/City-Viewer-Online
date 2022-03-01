@@ -15,7 +15,7 @@ Procedurally generate Cube City with manhattan style skyscrapers, roads, cars, s
 - Stoplights are placed at the intersections
 - Cars that drive around on the one-way roads, stop at red stoplights, and go on green
 - Stoplights that change and animate the way they should with their different red yellow and green bulbs, and relay that info to the cars
-- Helicopters that follows windy paths that circle big buildings, and don't crash into buildings
+- Helicopters that follows windy paths, circle big buildings, and don't crash into buildings
 - Settings to modify the procedural generation of Cube City for different sizes and styles
 
 ## Implementation
