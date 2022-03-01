@@ -9,6 +9,15 @@ C# Unity3D - Cube City
 ## Overview:
 Procedurally generate Cube City with manhattan style skyscrapers, roads, cars, stoplights, and helicopters of "ANY SIZE"!
 
+**Features:**
+- Grey cube primitives are procedurally instantiated, scaled and positioned to look like manhattan style buildings for each block
+- Roads are drawn between the blocks
+- Stoplights are placed at the intersections
+- Cars that drive around on the one-way roads, stop at red stoplights, and go on green
+- Stoplights that change and animate the way they should with their different red yellow and green bulbs, and relay that info to the cars
+- Helicopters that follows windy paths that circle big buildings, and don't crash into buildings
+- Settings to modify the procedural generation of Cube City for different sizes and styles
+
 ## Implementation
 ![Cube City diagram](https://user-images.githubusercontent.com/5803874/156256669-fc3db5f4-8708-4918-bf10-ecfbf9ab4b22.jpg)
 
