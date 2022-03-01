@@ -28,7 +28,7 @@ public class CubeCity : MonoBehaviour
     // objects of cube city
     public Transform cameraTarget;
     public Transform camP;
-    public Vector2Int camViewCurMax = new Vector2Int(0,2);
+    public Vector2Int camViewCurMax = new Vector2Int(0, 2);
     public List<Vector3> cameraSettings = new List<Vector3>();
     private Transform parentCubeCity;
     private Transform parentCars;
@@ -72,7 +72,7 @@ public class CubeCity : MonoBehaviour
         parentHeliPaths = new GameObject("Parent Heli Paths").transform;
         parentHeliPaths.parent = transform;
         cameraTarget = new GameObject("Camera Target").transform;
-        cameraTarget.position = new Vector3(((float)numCityBlocksXZ.x * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) *-0.9F);
+        cameraTarget.position = new Vector3(((float)numCityBlocksXZ.x * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9F);
         camP.position = cameraTarget.position;
         MakeCubeCity();
     }
@@ -114,6 +114,7 @@ public class CubeCity : MonoBehaviour
             StreetLightController instanceSLC = instanceSSL.AddComponent<StreetLightController>();
             instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this);
             streetLightControllers.Add(instanceSLC);
+
             // create StreetLight.cs adj list
             if (sLMatrix.Count <= onColRow[0])
             {
@@ -135,12 +136,14 @@ public class CubeCity : MonoBehaviour
     }
     private void SpawnCubeCity(Vector2Int sIndxAdjList)
     {
-        if (sIndxAdjList[1] < numCityBlocksXZ[1]) {
+        if (sIndxAdjList[1] < numCityBlocksXZ[1])
+        {
             //Debug.Log("looking to spawn city block at " + sIndxAdjList);
             // need to spawn cube city here? check the location to the right bottom
             Vector2Int botRightXZ = new Vector2Int(sIndxAdjList[0] + 1, sIndxAdjList[1] + 1);
 
-            if (botRightXZ[0] < sLMatrix.Count) {
+            if (botRightXZ[0] < sLMatrix.Count)
+            {
                 if (botRightXZ[1] < sLMatrix[botRightXZ[0]].inRow.Count)
                 {
                     bool clockWisePath = true;
@@ -169,9 +172,6 @@ public class CubeCity : MonoBehaviour
                     instanceRoad.transform.parent = instanceCityBlockGO.transform;
                     PathCreation.PathCreator newPath = instanceRoad.AddComponent<PathCreation.PathCreator>();
 
-                    // GameObject instanceRoad = Instantiate(roadPrefab);
-                    // instanceRoad.transform.parent = instanceCityBlockGO.transform;
-                    // PathCreation.PathCreator newPath = instanceRoad.GetComponent<PathCreation.PathCreator>();
                     //newPath
                     List<Vector3> pathPoints = new List<Vector3>();
                     pathPoints.Add(Vector3.zero);
@@ -187,7 +187,7 @@ public class CubeCity : MonoBehaviour
                         pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, cityBlockSizeXZ.y * -1.0F));
                         pathPoints.Add(new Vector3(cityBlockSizeXZ.x, 0.0F, 0.0F));
                     }
-                        pathPoints.Add(Vector3.zero);
+                    pathPoints.Add(Vector3.zero);
                     for (int i = 0; i < pathPoints.Count; i++)
                     {
                         Vector3 instancePivotCenter = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.02F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
@@ -217,8 +217,6 @@ public class CubeCity : MonoBehaviour
                     BezierPath newCarPath = new BezierPath(pathPoints);
                     cPCScript.bezierPath = newCarPath;
                     cPCScript.bezierPath.AutoControlLength = 0.01F;
-
-
 
                     // car model
                     int instanceIndx = carControllers.Count;
@@ -261,26 +259,26 @@ public class CubeCity : MonoBehaviour
         {
             for (int i2 = 0; i2 < superSkyScrapers[i].transform.childCount; i2++)
             {
-                    int rollPath = Random.Range(0, 2);
-                    usePath = heliPaths[rollPath].GetComponent<PathCreator>();
-                    PathCreator path = Instantiate(usePath, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
-                    path.bezierPath.GlobalNormalsAngle = 0.0F;
-                    path.gameObject.transform.name = "heli path";
-                    path.transform.parent = parentHeliPaths;
-                    instancePathPrefabs.Add(path);
+                int rollPath = Random.Range(0, 2);
+                usePath = heliPaths[rollPath].GetComponent<PathCreator>();
+                PathCreator path = Instantiate(usePath, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
+                path.bezierPath.GlobalNormalsAngle = 0.0F;
+                path.gameObject.transform.name = "heli path";
+                path.transform.parent = parentHeliPaths;
+                instancePathPrefabs.Add(path);
 
-                    // path detection (should not get too near any super sky scrapers or destroy the path)
-                    
-                    GameObject pathDetection = new GameObject("Path Detection");
-                    
-                    pathDetection.transform.parent = path.transform;
-                    PathPlacer instancePathPlacer = pathDetection.AddComponent<PathPlacer>();
-                    GameObject pathDetHolder = new GameObject("Path Det Holder");
-                    pathDetHolder.AddComponent<PathDetDestroySoon>();
-                    pathDetHolder.transform.parent = path.transform;
-                    instancePathPlacer.pathCreator = path;
-                    instancePathPlacer.prefab = pathDetCheckPrefab;
-                    instancePathPlacer.holder = pathDetHolder;
+                // path detection (should not get too near any super sky scrapers or destroy the path)
+
+                GameObject pathDetection = new GameObject("Path Detection");
+
+                pathDetection.transform.parent = path.transform;
+                PathPlacer instancePathPlacer = pathDetection.AddComponent<PathPlacer>();
+                GameObject pathDetHolder = new GameObject("Path Det Holder");
+                pathDetHolder.AddComponent<PathDetDestroySoon>();
+                pathDetHolder.transform.parent = path.transform;
+                instancePathPlacer.pathCreator = path;
+                instancePathPlacer.prefab = pathDetCheckPrefab;
+                instancePathPlacer.holder = pathDetHolder;
             }
         }
         StartCoroutine(SpawnHelicoptersSoon());
@@ -288,7 +286,6 @@ public class CubeCity : MonoBehaviour
     private IEnumerator SpawnHelicoptersSoon()
     {
         yield return new WaitForEndOfFrame();
-        //yield return new WaitForSeconds(0.02F);
         if (parentHeliPaths.childCount > 0)
         {
             SpawnHelicopters();
@@ -302,27 +299,21 @@ public class CubeCity : MonoBehaviour
             maxHelis = 200;
         }
         int tries = 0;
-        
+
         List<Vector3> pathPoints = new List<Vector3>();
         pathPoints.Add(Vector3.zero);
         pathPoints.Add(Vector3.one);
 
-
-
-
         while (heliControllers.Count < maxHelis && tries < 300)
         {
-
-
             // create helis
             GameObject instanceHeli = Instantiate(heli);
             instanceHeli.transform.parent = parentHelis;
             instanceHeli.transform.name = "heli " + heliControllers.Count;
 
-      
             // heli model
             int instanceIndx = heliControllers.Count;
-            HelicopterModel instanceHeliModel = new HelicopterModel(instanceIndx, Random.Range(3.0F,10.0F), 0.0F);
+            HelicopterModel instanceHeliModel = new HelicopterModel(instanceIndx, Random.Range(3.0F, 10.0F), 0.0F);
 
             PathFollower instancePF = instanceHeli.AddComponent<PathFollower>();
             instancePF.speed = instanceHeliModel.speed;
@@ -332,7 +323,6 @@ public class CubeCity : MonoBehaviour
                 pickPathInstance -= parentHeliPaths.childCount;
             }
             instancePF.pathCreator = parentHeliPaths.GetChild(pickPathInstance).GetComponent<PathCreator>();
-
 
             // heli controller
             HelicopterController instanceHC = instanceHeli.AddComponent<HelicopterController>();
@@ -366,8 +356,8 @@ public class CubeCity : MonoBehaviour
         }
         else if (camViewCurMax.x == 1)
         {
-            
-            int chooseHeli = Random.Range(0, parentHelis.childCount -1);
+
+            int chooseHeli = Random.Range(0, parentHelis.childCount - 1);
             cameraTarget.parent = parentHelis.GetChild(chooseHeli);
             cameraTarget.localPosition = Vector3.zero;
             cameraTarget.localRotation = Quaternion.identity;

@@ -105,8 +105,6 @@ public class CityBlock : MonoBehaviour
                                 float noiseScale = Random.Range(0.0F, 3.5F);
                                 float rotateFullyHere = Random.Range(0.0F, 360.0F);
                                 instanceHeliLoopGO.transform.localEulerAngles = new Vector3(Random.value* noiseScale - Random.value* noiseScale, rotateFullyHere, Random.value* noiseScale - Random.value* noiseScale);
-                                
-
                                 heliPathRefGOs.Add(instanceHeliLoopGO.transform);
                             }
                         }
