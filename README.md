@@ -1,3 +1,5 @@
+Attention, Disclaimer: This sprint Project was inspired by a 3rd party. Ask me for more details.
+
 # Cube-City-Unity-Sprint
 C# Unity3D - Cube City
 
