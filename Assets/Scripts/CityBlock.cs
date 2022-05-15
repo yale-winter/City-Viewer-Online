@@ -9,16 +9,13 @@ public class CityBlock : MonoBehaviour
         GenerateCityBlock();
     }
     private Transform blockParent;
-    private float theMinSize = 1.0F;
     private float useWidth = 2.0F;
     private readonly float defaultUseWidth = 2.0F;
     public Vector2Int buildingsCurMax = new Vector2Int(0, 20);
     private Vector2 buildingLengthMinMax = new Vector2(1.0F, 6.0F);
     public Vector2 blockSize = new Vector2(10.0F,10.0F);
-    public Material mat;
-    [Tooltip("rotation noise for helicopter path start objects")]
-    public float noiseStrength = 0.25F;
-    public Color[] cols = new Color[5];
+    private Material mat;
+    private float noiseStrength = 0.1F;
     public CubeCity cubeCity;
     [Tooltip("super skyscrapers here")]
     public List<GameObject> sSSHere = new List<GameObject>();
@@ -26,11 +23,10 @@ public class CityBlock : MonoBehaviour
     [Tooltip("helicopter path start objects")]
     public List<Transform> heliPathRefGOs = new List<Transform>();
 
-    public void SetUp(int maxBuildings, Vector2 instanceSize, Color[] setCols, Material setMat, CubeCity setCubeCity)
+    public void SetUp(int maxBuildings, Vector2 instanceSize, Material setMat, CubeCity setCubeCity)
     {
         buildingsCurMax[1] = maxBuildings;
         blockSize = new Vector2(instanceSize[0], instanceSize[1]);
-        cols = setCols;
         mat = setMat;
         cubeCity = setCubeCity;
     }
@@ -39,6 +35,8 @@ public class CityBlock : MonoBehaviour
         blockParent = new GameObject("Parent Buildings").transform;
         blockParent.parent = transform;
 
+        float startX = transform.position.x - blockSize.x * 0.5F + useWidth * 0.5F;
+        //
         float curX = transform.position.x - blockSize.x * 0.5F + useWidth * 0.5F;
         float endX = transform.position.x + blockSize.x * 0.5F;
         float startZ = transform.position.z - blockSize.y * 0.5F;
@@ -54,7 +52,7 @@ public class CityBlock : MonoBehaviour
                 
                 Material instanceMat = new Material(mat);
                 float colNoise = (Random.value - 0.5F) * noiseStrength;
-                instanceMat.color = cols[Random.Range(0, cols.Length)] + new Color(colNoise, colNoise, colNoise);
+                instanceMat.color += new Color(colNoise, colNoise, colNoise);
                 building.GetComponent<MeshRenderer>().sharedMaterial = instanceMat;
                 float length = Mathf.Min(Random.Range(buildingLengthMinMax.x, buildingLengthMinMax.y), endZ - curZ);
                 
@@ -75,7 +73,7 @@ public class CityBlock : MonoBehaviour
 
                 int totalBlocks = Mathf.RoundToInt(cubeCity.cityBlockSizeXZ.x * cubeCity.cityBlockSizeXZ.y);
 
-                if (sSSHere.Count < 1 && curX + superSkyWidth < endX && length >= buildingLengthMinMax.y*0.5F) {
+                if (sSSHere.Count < 1 && curX + superSkyWidth/2.0f <= endX && length >= buildingLengthMinMax.y*0.5f && curX - superSkyWidth/2.0f >= startX) {
                     if (cubeCity.superSkyScrapers.Count < Mathf.FloorToInt(cubeCity.superSkyScrapersAvgPerBlock * totalBlocks))
                     {
                         float roll2 = Random.value;
@@ -98,7 +96,7 @@ public class CityBlock : MonoBehaviour
 
                                 instanceHeliLoopGO.transform.parent = building;
                                 instanceHeliLoopGO.transform.name = "possible heli loop";
-                                float yPos = Random.Range(0.1F, 0.7F);
+                                float yPos = Random.Range(0.2F, 0.7F);
                                 float moreXZ = Random.Range(5.1F, 5.3F);
                                 instanceHeliLoopGO.transform.localPosition = new Vector3(0.0F, yPos, 0.0F);
                                 instanceHeliLoopGO.transform.localScale = new Vector3(instanceHeliLoopGO.transform.localScale.x* moreXZ, instanceHeliLoopGO.transform.localScale.y*0.08F, instanceHeliLoopGO.transform.localScale.z* moreXZ);
@@ -125,7 +123,6 @@ public class CityBlock : MonoBehaviour
                     rB.isKinematic = true;
                     building.gameObject.AddComponent<BuildingPlacementDet>();
                 }  
-
             }
             curX += useWidth;
             curZ = startZ;

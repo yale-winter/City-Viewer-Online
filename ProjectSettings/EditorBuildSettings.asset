@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CubeCityScene.unity
     guid: 1cc7abc08a055c0429c6183504dc1be5
+  - enabled: 1
+    path: Assets/Scenes/Load.unity
+    guid: 8f62704fa39efd5499259e631e8d835b
   m_configObjects: {}

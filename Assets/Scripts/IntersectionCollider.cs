@@ -5,6 +5,11 @@ public class IntersectionCollider : MonoBehaviour
     public StreetLightController myController;
     private void OnTriggerEnter(Collider other)
     {
-        myController.CarApproaching(other.transform.parent.name);
+        
+        if (other.gameObject.layer == LayerMask.NameToLayer("CarFrontDet"))
+        {
+            myController.CarApproaching(other.transform.parent.name);
+        }
+        
     }
 }

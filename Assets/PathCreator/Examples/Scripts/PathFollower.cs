@@ -16,6 +16,7 @@ namespace PathCreation.Examples
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
+                distanceTravelled = Random.Range(0.0f, 10000.0f);
             }
         }
 
