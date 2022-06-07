@@ -1,5 +1,3 @@
-# Attention, Disclaimer: This sprint Project was inspired by a 3rd party.
-
 # City-Viewer-Online
 C# PHP SQL Unity3D - City Viewer Online
 
