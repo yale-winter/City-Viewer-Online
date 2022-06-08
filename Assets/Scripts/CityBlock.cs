@@ -47,13 +47,15 @@ public class CityBlock : MonoBehaviour
             while (curZ < endZ && buildingsCurMax[0] < buildingsCurMax[1])
             {
                 buildingsCurMax[0]++;
-                Transform building = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
+                GameObject newBuilding = Instantiate(cubeCity.cityBuilding);
+                Transform building = newBuilding.transform;
                 building.parent = blockParent;
-                
+                /*
                 Material instanceMat = new Material(mat);
                 float colNoise = (Random.value - 0.5F) * noiseStrength;
                 instanceMat.color += new Color(colNoise, colNoise, colNoise);
                 building.GetComponent<MeshRenderer>().sharedMaterial = instanceMat;
+                */
                 float length = Mathf.Min(Random.Range(buildingLengthMinMax.x, buildingLengthMinMax.y), endZ - curZ);
                 
                 // always end on buildings

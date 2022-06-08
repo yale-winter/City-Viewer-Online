@@ -80,6 +80,8 @@ public class CubeCity : MonoBehaviour
     private Persist persist;
     Vector3 viewPos1;
     Vector3 viewPos2;
+
+    public GameObject cityBuilding;
     
     void Awake()
     {

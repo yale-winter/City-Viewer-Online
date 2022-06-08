@@ -167,6 +167,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &364301096 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7604787671316975670, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
+  m_PrefabInstance: {fileID: 1153061256927394117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &479424613 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1153061256618517203, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
@@ -523,6 +534,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5213971678201042972, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
   m_PrefabInstance: {fileID: 5213971677604880923}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1564004335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564004334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4387649a48152f4890c5f98bc7d32a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Text: {fileID: 364301096}
 --- !u!114 &1564004336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,6 +1096,10 @@ PrefabInstance:
       propertyPath: displayText
       value: 
       objectReference: {fileID: 838375306}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: cityBuilding
+      value: 
+      objectReference: {fileID: 4394074390167741361, guid: 497c5cf4a30b33641819e7a1a3b8990f, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numCityBlocksXZ.x
       value: 6
