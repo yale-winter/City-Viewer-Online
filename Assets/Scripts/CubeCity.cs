@@ -145,7 +145,7 @@ public class CubeCity : MonoBehaviour
             //loadColorStr = "255255255";
             Debug.Log("loadColorStr : " + loadColorStr);
             mat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
-
+            /*
             roadMat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
             float brightness = (roadMat.color.r + roadMat.color.g + roadMat.color.b) / 3.0f;
             if (brightness < 0.5)
@@ -158,6 +158,7 @@ public class CubeCity : MonoBehaviour
                 //Debug.Log("darker roads");
                 roadMat.color -= new Color32(40, 40, 40, 0);
             }
+            */
             // end import data
         }
 

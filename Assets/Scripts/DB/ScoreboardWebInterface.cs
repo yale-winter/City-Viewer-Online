@@ -8,9 +8,9 @@ using UnityEngine.Networking;
 public class ScoreboardWebInterface : MonoBehaviour
 {
     // psuedo-public password below: another hidden password is used on private website accessed only from the same site
-    private string secretKey = "your psuedo public pass"; // Edit this value and make sure it's the same as the one stored on the server
-    public string addScoreURL = "your php file online to use SQL to add score to DB"; //be sure to add a ? to your url
-    public string highscoreURL = "your php file online to use SQL to read DB";
+    private string secretKey = "Gosh@_23872"; // Edit this value and make sure it's the same as the one stored on the server
+    public string addScoreURL = "https://yalewinter.com/cityviewer/savecity.php?"; //be sure to add a ? to your url
+    public string highscoreURL = "https://yalewinter.com/cityviewer/readcities.php";
 
     private int dataCols = 6;
 

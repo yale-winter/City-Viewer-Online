@@ -43,29 +43,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a096f5ceccaca14ebc404ac693eac25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCityBlocks: []
   numCityBlocksXZ: {x: 10, y: 10}
   cityBlockSizeXZ: {x: 20, y: 10}
   helicoptersAvgPerBlock: 0.5
   superSkyScrapersAvgPerBlock: 0.4
-  bColors:
-  - {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
-  - {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
-  - {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
-  - {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
-  - {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
   sLColors:
   - {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 1, g: 0.89061534, b: 0, a: 1}
   - {r: 0.15204406, g: 1, b: 0, a: 1}
   bulbMat: {fileID: 2100000, guid: c1d650539641f4f4683446ed43766723, type: 2}
-  mat: {fileID: 2100000, guid: e34be34df482c334bba30a844471f350, type: 2}
-  maxBuildingsInBlock: 250
-  roadBuffer: 2
+  mat: {fileID: 2100000, guid: 99be3e819903141469b6d317dc3769c9, type: 2}
   roadMat: {fileID: 2100000, guid: 926169f93d84fab418128d90c1f2ce6b, type: 2}
   cameraTarget: {fileID: 0}
   camP: {fileID: 0}
-  camViewCurMax: {x: 0, y: 2}
   cameraSettings:
   - {x: 3, y: -3, z: 45}
   - {x: 8, y: -8, z: 45}
@@ -85,3 +77,5 @@ MonoBehaviour:
   - {fileID: 2022727280606171017, guid: e6ff932d3cba52f43b9dcc066bb4209b, type: 3}
   pathDetCheckPrefab: {fileID: 6069671225471395440, guid: 05957b36299c8884787db6749bb92f4e, type: 3}
   displayText: {fileID: 0}
+  cityBuilding: {fileID: 0}
+  loadIndex: 0
