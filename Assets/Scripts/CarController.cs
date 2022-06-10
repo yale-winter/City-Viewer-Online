@@ -16,10 +16,16 @@ public class CarController : MonoBehaviour
     private float immuneToStopDur = 0.0f;//1.5f;
     private bool crossingIntersection = false;
     private bool waitingIntersection = false;
+    public bool pathControlled = true;
 
-
+    Vector3 freewayExitPos = new Vector3(0.32f, 0.05f, -20.0f);
+    Quaternion normalCarQ = Quaternion.identity;
+    float speed = 1.0f;
+    bool lerpingPos = false;
     public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC)
     {
+        normalCarQ.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
+
         iD = setID;
         car = setCar;
         carModel = setModel;
@@ -161,9 +167,49 @@ public class CarController : MonoBehaviour
                 updated = true;
             }
             car.GetComponent<PathFollower>().speed = Mathf.Clamp(car.GetComponent<PathFollower>().speed, 0.0f, carModel.speed);
+            speed = car.GetComponent<PathFollower>().speed;
             yield return 0;
         }
         car.GetComponent<PathFollower>().speed = targetSpeed;
         changeSpeedCRRunning = false;
+    }
+    Vector3 exitStartPos;
+    Quaternion exitStartQ;
+    public void ExitFreeway()
+    {
+        car.GetComponent<PathFollower>().enabled = false;
+        pathControlled = false;
+        lerpingPos = true;
+        exitStartPos = car.transform.position;
+        exitStartQ = car.transform.localRotation;
+        StartCoroutine("GoOffRamp");
+
+    }
+
+    private IEnumerator GoOffRamp()
+    {
+        float p = 0.0f;
+        while (p < 1.0f)
+        {
+            p += Time.deltaTime;
+            if (p > 1.0f)
+            {
+                p = 1.0f;
+            }
+            car.transform.position = Vector3.Lerp(exitStartPos, freewayExitPos, p);
+            car.transform.localRotation = Quaternion.Lerp(exitStartQ, normalCarQ, p);
+            yield return 0;
+        }
+        
+        lerpingPos = false;
+    }
+    public void Update()
+    {
+        if (!pathControlled && !lerpingPos)
+        {
+
+                car.transform.position = new Vector3(car.transform.position.x + speed * Time.deltaTime, car.transform.position.y, car.transform.position.z);
+
+        }
     }
 }

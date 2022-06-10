@@ -9,7 +9,8 @@ using UnityEngine.SceneManagement;
 public class CubeCity : MonoBehaviour
 {
     public List<GameObject> allCityBlocks = new List<GameObject>();
-
+    public GameObject freewayPath;
+    Vector3 freewayPos = new Vector3(-5.5f, 0.0f, -10.3f);
 
     /// <summary>
     /// number of city blocks to use in X and Z
@@ -169,6 +170,7 @@ public class CubeCity : MonoBehaviour
         cameraTarget.position = viewPos1;
         camP.position = cameraTarget.position;
         SpawnStopLights();
+        CreateFreeways();
         SpawnCubeCity(new Vector2Int(0, 0));
         StartCoroutine("AddHelicoptersSoon");
     }
@@ -244,6 +246,22 @@ public class CubeCity : MonoBehaviour
             }
         }
     }
+    GameObject instanceFreeway;
+    void CreateFreeways()
+    {
+
+        instanceFreeway = Instantiate(freewayPath);
+        instanceFreeway.transform.name = "freeway";
+        instanceFreeway.transform.position = freewayPos;
+        instanceFreeway.transform.localEulerAngles = new Vector3(0.0f,90.0f,0.0f);
+        // road mesh
+        RoadMeshCreator instanceRoadMesh = instanceFreeway.AddComponent<RoadMeshCreator>();
+        instanceRoadMesh.roadMaterial = roadMat;
+        instanceRoadMesh.undersideMaterial = roadMat;
+        instanceRoadMesh.roadWidth = 0.6f;
+
+
+    }
     private void SpawnCubeCity(Vector2Int sIndxAdjList)
     {
         if (sIndxAdjList[1] < numCityBlocksXZ[1])
@@ -280,10 +298,18 @@ public class CubeCity : MonoBehaviour
                     instanceCityBlockGO.transform.position = setInstancePos;
 
                     // create road ring around the block - - - - - - - -
+
+
+
+
+
+                    
                     GameObject instanceRoad = new GameObject("straight road");
                     instanceRoad.transform.parent = instanceCityBlockGO.transform;
                     PathCreation.PathCreator newPath = instanceRoad.AddComponent<PathCreation.PathCreator>();
-
+                    
+                    
+                    
                     //newPath
                     List<Vector3> pathPoints = new List<Vector3>();
                     pathPoints.Add(Vector3.zero);
@@ -317,14 +343,22 @@ public class CubeCity : MonoBehaviour
                     instanceRoadMesh.undersideMaterial = roadMat;
                     instanceRoadMesh.roadWidth = 0.6f;
 
+
+
                     // car path
                     GameObject instanceCPC = new GameObject("CarPathCreat " + carControllers.Count);
                     instanceCPC.transform.parent = parentCarPaths;
+                    instanceCPC.transform.position = freewayPos;
+                    instanceCPC.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
                     PathCreator cPCScript = instanceCPC.AddComponent<PathCreator>();
-                    BezierPath newCarPath = new BezierPath(pathPoints);
-                    cPCScript.bezierPath = newCarPath;
-                    cPCScript.bezierPath.AutoControlLength = 0.01f;
-                    int createThisManyCarsBlock = Random.Range(0,3);
+                    BezierPath usePath = new BezierPath(Vector3.zero);
+                    usePath = instanceFreeway.GetComponent<PathCreator>().bezierPath;
+                    cPCScript.bezierPath = usePath;
+                    //cPCScript.bezierPath.AutoControlLength = 0.01f;
+
+                    // end car path stuff
+
+                    int createThisManyCarsBlock = 1;//Random.Range(0,2);
                    // Debug.Log("create this many cars block: " + createThisManyCarsBlock);
                     for (int i = 0; i < createThisManyCarsBlock; i++)
                     {
@@ -338,9 +372,13 @@ public class CubeCity : MonoBehaviour
                         CarModel instanceCarModel = new CarModel(instanceIndx, Random.Range(3.0F, 5.0F));
 
                         // car path follower
+                        
                         PathFollower instancePF = instanceCar.AddComponent<PathFollower>();
                         instancePF.pathCreator = cPCScript;
                         instancePF.speed = instanceCarModel.speed;
+                        instancePF.carID = instanceIndx;
+                        instancePF.onFreeway = true;
+
 
                         // car controller
                         CarController instanceCC = instanceCar.AddComponent<CarController>();
@@ -552,5 +590,10 @@ public class CubeCity : MonoBehaviour
             str = "0" + str;
         }
         return str;
+    }
+    public void CarExitFreeway(int carID)
+    {
+        carControllers[carID].ExitFreeway();
+        Debug.Log("car exit freeway " + carID);
     }
 }
