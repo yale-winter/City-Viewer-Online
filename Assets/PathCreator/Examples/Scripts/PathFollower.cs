@@ -11,7 +11,7 @@ namespace PathCreation.Examples
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
         public int carID = -1;
-        private float distanceTravelled;
+        public float distanceTravelled;
         public bool onFreeway = false;
 
         void Start() {
@@ -33,7 +33,7 @@ namespace PathCreation.Examples
 
                 if (onFreeway)
                 {
-                    if (distanceTravelled > 51.0f)
+                    if (distanceTravelled > 19.3f)
                     {
                         onFreeway = false;
                         CubeCity cubeCity = GameObject.Find("CubeCity").GetComponent<CubeCity>();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 [Serializable]
 public class StreetLightController : MonoBehaviour
@@ -7,7 +8,8 @@ public class StreetLightController : MonoBehaviour
     public IntersectionCollider iC;
     public SignStopLightView sSLV;
     public StreetLightModel sLM;
-    public Allow allowPassage = Allow.SouthEast;
+    public Allow allowPassage = Allow.None;
+    public Allow[] posPassAllowed = new Allow[2];
     [Tooltip("delay to switch the lights")]
     private Vector2 delayMinMax = new Vector2(4.0F,10.0F);
     private float yellowLightDelay = 2.0F;
@@ -17,10 +19,17 @@ public class StreetLightController : MonoBehaviour
     private float timeOfLastSwitch = float.PositiveInfinity;
     private float waitingDur = 0.0F;
     private int carsWaitingHere = 0;
-    private bool flipAxis = false;
+    private int flipAxis = 0;
+    string[] posPassAllowedS = new string[2];
+    public List<string> blocked = new List<string>();
+    public bool freewayEntrance = false;
 
-    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool setFlipAxis)
+    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool[] flip, List<string> setBlocked)
     {
+        for (int i = 0; i < setBlocked.Count; i++)
+        {
+            blocked.Add(setBlocked[i]);
+        }
         iC = setIC;
         iC.myController = this;
         sSLV = setSSLV;
@@ -28,15 +37,59 @@ public class StreetLightController : MonoBehaviour
         sLColors = setSLColors;
         bulbMat = setBulbMat;
         cubeCity = setCubeCity;
-        flipAxis = setFlipAxis;
+
+
+        if (sLM.iD == 17)
+        {
+            freewayEntrance = true;
+        }
+        
+
+        posPassAllowed[0] = Allow.East;
+        posPassAllowed[1] = Allow.North;
+
+        if (flip[0])
+        {
+          //  Debug.Log("flip 0");
+            posPassAllowed[0] = Allow.West;
+            setSSLV.xLights[0].transform.parent.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
+        }
+        
+        if (flip[1])
+        {
+            //Debug.Log("flip 1");
+            posPassAllowed[1] = Allow.South;
+            setSSLV.zLights[0].transform.parent.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+
+        // removed blocked from options
+        if (isBlocked(posPassAllowed[0].ToString()))
+        {
+            posPassAllowed[0] = posPassAllowed[1];
+        }
+        else if (isBlocked(posPassAllowed[1].ToString()))
+        {
+            posPassAllowed[1] = posPassAllowed[0];
+
+        }
+
+        posPassAllowedS = new string[2];
+        posPassAllowedS[0] = posPassAllowed[0].ToString();
+        posPassAllowedS[1] = posPassAllowed[1].ToString();
+
+
+
+        /*
         if (flipAxis)
         {
             setSSLV.pivotLight.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
         }
+        */
 
 
-        allowPassage = Allow.SouthEast;
+        allowPassage = Allow.North;
         float roll = UnityEngine.Random.Range(0, 2);
+        /*
         if (roll == 0)
         {
             allowPassage = Allow.NorthWest;
@@ -56,15 +109,33 @@ public class StreetLightController : MonoBehaviour
             SetLightBulbColor(Allow.NorthWest, 2, 3);
             SetLightBulbColor(Allow.SouthEast, 0, 1);
         }
+        */
+
+
+
+
         float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
         waitingDur = setWait;
         timeOfLastSwitch = Time.time;
         StartCoroutine(WaitToSwitchLightsAgain(setWait));
     }
-    public enum Allow { SouthEast, NorthWest };
+    bool isBlocked(string desc)
+    {
+        for (int i = 0; i < blocked.Count; i++) {
+            if (desc == blocked[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public enum Allow { None, North, East, South, West };
     public IEnumerator SwitchLights()
     {
-        Allow setA = Allow.SouthEast;
+        yield return 0;
+        Allow setA = Allow.South;
+        /*
+        
         if (allowPassage == Allow.SouthEast)
         {
             setA = Allow.NorthWest;
@@ -89,6 +160,8 @@ public class StreetLightController : MonoBehaviour
             SetLightBulbColor(Allow.SouthEast, 0, 0);
             SetLightBulbColor(Allow.SouthEast, 2, 3);
         }
+        */
+
         carsWaitingHere = 0;
         allowPassage = setA;
         float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
@@ -105,7 +178,7 @@ public class StreetLightController : MonoBehaviour
     {
         Material instanceMat = new Material(bulbMat);
         instanceMat.color = sLColors[setColor];
-        if (allowAxis == Allow.SouthEast)
+        if (allowAxis == Allow.West || allowAxis == Allow.East)
         {
             sSLV.xLights[setBulb].transform.GetComponent<MeshRenderer>().material = instanceMat;
         }
@@ -118,14 +191,11 @@ public class StreetLightController : MonoBehaviour
     {
         if (carName.Substring(0, 3) == "car")
         {
-            string travelOK = "SouthEast";
-            if (allowPassage == Allow.NorthWest)
-            {
-                travelOK = "NorthWest";
-            }
+            string travelOK = allowPassage.ToString();
             int carID = int.Parse(carName.Substring(4));
             float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + carsWaitingHere*1.2f;
-            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur);
+
+            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x,0.05f,transform.position.z), freewayEntrance);
         }
         carsWaitingHere++;
     }

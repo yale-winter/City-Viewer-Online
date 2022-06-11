@@ -1078,7 +1078,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7126026917646841539, guid: e1a6a96c80035b740bc23b6a03d7ceaf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.9352512
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7126026917646841539, guid: e1a6a96c80035b740bc23b6a03d7ceaf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1086,7 +1086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7126026917646841539, guid: e1a6a96c80035b740bc23b6a03d7ceaf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.8941984
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7126026917646841539, guid: e1a6a96c80035b740bc23b6a03d7ceaf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1175,6 +1175,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1d540f3587fd8c4aaad3cb9c5b797c1, type: 3}
+--- !u!1001 &4361754854707702584
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7414866598832859110, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_Name
+      value: FreewayPath2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076347724715060026, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
 --- !u!1001 &5213971677604880923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1222,6 +1279,10 @@ PrefabInstance:
       propertyPath: cityBuilding
       value: 
       objectReference: {fileID: 4394074390167741361, guid: 497c5cf4a30b33641819e7a1a3b8990f, type: 3}
+    - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
+      propertyPath: freewayPath2
+      value: 
+      objectReference: {fileID: 7414866598832859110, guid: d5caeecbc429f9f488967a6d9da99a9f, type: 3}
     - target: {fileID: 5213971678201042960, guid: 33e8aa69417368e439f326330b63fb75, type: 3}
       propertyPath: numCityBlocksXZ.x
       value: 6
