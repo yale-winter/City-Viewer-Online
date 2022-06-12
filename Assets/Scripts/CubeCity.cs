@@ -87,6 +87,8 @@ public class CubeCity : MonoBehaviour
 
     private int carsTotal = 0;
 
+    private GameObject cameraMovingTarget;
+
 
     void Awake()
     {
@@ -123,6 +125,8 @@ public class CubeCity : MonoBehaviour
         cameraTarget = new GameObject("Camera Target").transform;
         cameraTarget.position = new Vector3(0.0f, 30.0f, 0.0f);
         camP.position = cameraTarget.position;
+        cameraMovingTarget = new GameObject("Camera Moving Target");
+        cameraMovingTarget.transform.parent = transform;
     }
     public int loadIndex = 0;
     public void CreateCubeCity(Scores data, bool loadOnline = true)
@@ -269,7 +273,7 @@ public class CubeCity : MonoBehaviour
                 }
             }
 
-            int freewayEntranceID = numCityBlocksXZ[1] * 3 - 1;
+            int freewayEntranceID = numCityBlocksXZ[0] * 3 - 1;
             instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this, flipLightAxis, blocked, isCorner, freewayEntranceID);
             streetLightControllers.Add(instanceSLC);
 
@@ -450,6 +454,9 @@ public class CubeCity : MonoBehaviour
                     {
                         createThisManyCarsBlock = 0;
                     }
+                    //dev
+                    createThisManyCarsBlock = 2;
+
                     // Debug.Log("create this many cars block: " + createThisManyCarsBlock);
                     for (int i = 0; i < createThisManyCarsBlock; i++)
                     {
@@ -524,6 +531,7 @@ public class CubeCity : MonoBehaviour
                 int rollPath = Random.Range(0, 2);
                 PathCreator usePath = heliPaths[rollPath].GetComponent<PathCreator>();
                 PathCreator path = Instantiate(usePath, superSkyScrapers[i].transform.GetChild(i2).position, superSkyScrapers[i].transform.GetChild(i2).rotation);
+
                 path.bezierPath.GlobalNormalsAngle = 0.0F;
                 path.gameObject.transform.name = "heli path";
                 path.transform.parent = parentHeliPaths;
@@ -580,6 +588,7 @@ public class CubeCity : MonoBehaviour
 
             PathFollower instancePF = instanceHeli.AddComponent<PathFollower>();
             instancePF.speed = instanceHeliModel.speed;
+            instancePF.type = "helicopter";
             int pickPathInstance = Random.Range(0, parentHeliPaths.childCount);
             // Debug.Log("pick path instance: " + pickPathInstance);
             instancePF.pathCreator = parentHeliPaths.GetChild(pickPathInstance).GetComponent<PathCreator>();
@@ -629,6 +638,8 @@ public class CubeCity : MonoBehaviour
         else if (camViewCurMax.x == 1)
         {
 
+
+
             int chooseHeli = Random.Range(0, parentHelis.childCount - 1);
             cameraTarget.parent = parentHelis.GetChild(chooseHeli);
             cameraTarget.localPosition = Vector3.zero;
@@ -639,6 +650,15 @@ public class CubeCity : MonoBehaviour
             camP.localEulerAngles = new Vector3(0.0F, 0.0F, 90.0F);
             camP.GetChild(0).localPosition = new Vector3(0.0F, cameraSettings[1].x, cameraSettings[1].y);
             camP.GetChild(0).localEulerAngles = new Vector3(cameraSettings[1].z, 0.0F, 0.0F);
+
+            // new
+            cameraTarget.transform.eulerAngles = new Vector3(0.0f, -90.0f, -90.0f);
+            cameraTarget.parent = null;
+
+            cameraMovingTarget.transform.parent = parentHelis.GetChild(chooseHeli);
+            cameraMovingTarget.transform.localPosition = Vector3.zero;
+
+
             int showRealNumHeli = chooseHeli + 1;
             instanceStr = "Heli (" + showRealNumHeli + ") View";
         }
@@ -706,6 +726,10 @@ public class CubeCity : MonoBehaviour
     }
     private void Update()
     {
+        if (camViewCurMax.x == 1)
+        {
+            cameraTarget.transform.position = cameraMovingTarget.transform.position;
+        }
         for (int i = 0; i < carControllers.Count; i++)
         {
             carControllers[i].PossiblyMove();

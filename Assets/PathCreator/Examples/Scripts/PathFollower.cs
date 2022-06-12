@@ -13,13 +13,17 @@ namespace PathCreation.Examples
         public int carID = -1;
         public float distanceTravelled;
         public bool onFreeway = false;
+        public string type = "";
 
         void Start() {
             if (pathCreator != null)
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
-                //distanceTravelled = Random.Range(0.0f, 10000.0f);
+                if (type == "helicopter")
+                {
+                    distanceTravelled = Random.Range(0.0f, 10000.0f);
+                }
             }
         }
 

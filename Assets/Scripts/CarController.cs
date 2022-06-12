@@ -141,6 +141,9 @@ public class CarController : MonoBehaviour
     {
         waitingIntersection = true;
         yield return new WaitForSeconds(waitTime);
+        waitingIntersection = false;
+        crossingIntersection = true;
+
         bool enterFreeway = false;
         if (freewayEntrance)
         {
@@ -191,8 +194,7 @@ public class CarController : MonoBehaviour
 
         }
 
-        waitingIntersection = false;
-        crossingIntersection = true;
+
 
         if (enterFreeway)
         {
@@ -211,10 +213,9 @@ public class CarController : MonoBehaviour
         {
 
 
-            yield return new WaitForSeconds(0.3f / carModel.speed);
             if (turning)
                 ChangeSpeed(carModel.speed / 10.0f);
-            yield return new WaitForSeconds(1.1f / carModel.speed);
+            yield return new WaitForSeconds(1.4f / carModel.speed);
             if (turning)
             {
                 if (turnLeft)
@@ -400,7 +401,7 @@ public class CarController : MonoBehaviour
         float damp = 0.1f;
         while (p < 1.0f)
         {
-            float incrPush = Time.deltaTime * carModel.speed * damp;
+            float incrPush = Time.deltaTime * carModel.speed * damp * 1.8f;
             if (p < 0.3f)
             {
                 damp += Time.deltaTime;
