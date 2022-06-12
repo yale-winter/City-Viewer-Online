@@ -35,9 +35,10 @@ public class CarController : MonoBehaviour
     Vector3 freewayExitPos = new Vector3(0.32f, 0.05f, -20.0f);
     Vector3 enterFreewayPos = new Vector3(0.0f, 0.0f, 0.0f);
     Quaternion normalCarQ = Quaternion.identity;
-
-    public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC, PathCreator setPC2, Vector3 setEnterFreewayPos)
+    float spawnTime = 0.0f;
+    public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC, PathCreator setPC2, Vector3 setEnterFreewayPos, string instantDirection)
     {
+        spawnTime = Time.time;
         enterFreewayPos = setEnterFreewayPos;
         normalCarQ.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
 
@@ -52,64 +53,68 @@ public class CarController : MonoBehaviour
 
         lSpeed = carModel.speed;
 
+        InstantDirection(instantDirection);
+
     }
     public void ApproachIntersection(int intersectionID, string travelOK, float possibleWait, string[] setPosPassS, Vector3 interPos, bool freewayEntrance)
     {
-
-        if (!crossingIntersection && !waitingIntersection)
+        if (spawnTime + 1.0f < Time.time)
         {
-
-            posPassS = setPosPassS;
-            float xDiff = car.transform.position.x - car.transform.GetChild(0).transform.position.x;
-            float zDiff = car.transform.position.z - car.transform.GetChild(0).transform.position.z;
-            string carDir = "";
-
-            if (Math.Abs(zDiff) < Math.Abs(xDiff))
+            if (!crossingIntersection && !waitingIntersection)
             {
-                if (xDiff < 0)
+
+                posPassS = setPosPassS;
+                float xDiff = car.transform.position.x - car.transform.GetChild(0).transform.position.x;
+                float zDiff = car.transform.position.z - car.transform.GetChild(0).transform.position.z;
+                string carDir = "";
+
+                if (Math.Abs(zDiff) < Math.Abs(xDiff))
                 {
-                    carDir = "East";
+                    if (xDiff < 0)
+                    {
+                        carDir = "East";
+                    }
+                    else
+                    {
+                        carDir = "West";
+                    }
                 }
                 else
                 {
-                    carDir = "West";
+                    if (zDiff < 0)
+                    {
+                        carDir = "North";
+                    }
+                    else
+                    {
+                        carDir = "South";
+                    }
+
                 }
-            }
-            else
-            {
-                if (zDiff < 0)
+                if (iD == 0)
                 {
-                    carDir = "North";
+                    Debug.Log("approach intersection (" + intersectionID + ") car (" + iD + ") carDir " + carDir + " travelOK " + travelOK + " intersec id " + intersectionID + " inter pos " + interPos + " posPassS[0] " + posPassS[0] + " posPassS[1] " + posPassS[1]);
                 }
-                else
+                bool mustWait = true;
+                if (travelOK == carDir)
                 {
-                    carDir = "South";
+
+                    mustWait = false;
+
                 }
 
+                if (!mustWait)
+                {
+                    possibleWait = 0.0f;
+                }
+
+
+
+                //possibleWait = 0.0f;
+                StartCoroutine(CrossIntersection(possibleWait, interPos, freewayEntrance));
+                //}
+                // Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
             }
-            if (iD == 0)
-            {
-                Debug.Log("approach intersection (" + intersectionID + ") car (" + iD + ") carDir " + carDir + " travelOK " + travelOK + " intersec id " + intersectionID + " inter pos " + interPos + " posPassS[0] " + posPassS[0] + " posPassS[1] " + posPassS[1]);
-            }
-            bool mustWait = true;
-            if (travelOK == carDir)
-            {
-
-                mustWait = false;
-
-            }
-
-            if (!mustWait)
-            {
-                possibleWait = 0.0f;
-            }
-
-
-
-            //possibleWait = 0.0f;
-            StartCoroutine(CrossIntersection(possibleWait, interPos, freewayEntrance));
-            //}
-            // Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
         }
     }
     public static string FlipDir(string thisDir)
@@ -206,10 +211,10 @@ public class CarController : MonoBehaviour
         {
 
 
-            yield return new WaitForSeconds(1.0f / carModel.speed);
-            if (turning)
-                ChangeSpeed(carModel.speed / 5.0f);
             yield return new WaitForSeconds(0.3f / carModel.speed);
+            if (turning)
+                ChangeSpeed(carModel.speed / 10.0f);
+            yield return new WaitForSeconds(1.1f / carModel.speed);
             if (turning)
             {
                 if (turnLeft)
@@ -460,6 +465,33 @@ public class CarController : MonoBehaviour
     }
 
 
-
+    public void InstantDirection(string dir)
+    {
+        car.transform.localRotation = normalCarQ;
+        if (dir == "North")
+        {
+            car.transform.Rotate(new Vector3(90.0f, 0.0f, 0.0f));
+            moveDir[0] = 0.0f;
+            moveDir[1] = 1.0f;
+        }
+        else if (dir == "South")
+        {
+            car.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+            moveDir[0] = 0.0f;
+            moveDir[1] = -1.0f;
+        }
+        else if (dir == "East")
+        {
+            
+            moveDir[0] = 1.0f;
+            moveDir[1] = 0.0f;
+        }
+        else if (dir == "West")
+        {
+            car.transform.Rotate(new Vector3(180.0f, 0.0f, 0.0f));
+            moveDir[0] = -1.0f;
+            moveDir[1] = 0.0f;
+        }
+    }
 
 }

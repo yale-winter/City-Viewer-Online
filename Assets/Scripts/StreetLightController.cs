@@ -12,7 +12,7 @@ public class StreetLightController : MonoBehaviour
     public Allow[] posPassAllowed = new Allow[2];
     public Allow[] enterFromAllowed = new Allow[2];
     [Tooltip("delay to switch the lights")]
-    private Vector2 delayMinMax = new Vector2(4.0F,10.0F);
+    private Vector2 delayMinMax = new Vector2(4.0F, 10.0F);
     private float yellowLightDelay = 2.0F;
     private Color[] sLColors = new Color[4];
     public Material bulbMat;
@@ -24,9 +24,11 @@ public class StreetLightController : MonoBehaviour
     string[] posPassAllowedS = new string[2];
     public List<string> blocked = new List<string>();
     public bool freewayEntrance = false;
+    public bool imCorner = false;
 
-    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool[] flip, List<string> setBlocked)
+    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool[] flip, List<string> setBlocked, bool setCorner, int freewayEntranceID)
     {
+        imCorner = setCorner;
         for (int i = 0; i < setBlocked.Count; i++)
         {
             blocked.Add(setBlocked[i]);
@@ -40,7 +42,7 @@ public class StreetLightController : MonoBehaviour
         cubeCity = setCubeCity;
 
 
-        if (sLM.iD == 17)
+        if (sLM.iD == freewayEntranceID)
         {
             freewayEntrance = true;
         }
@@ -90,6 +92,21 @@ public class StreetLightController : MonoBehaviour
             allowPassage = enterFromAllowed[1];
         }
 
+        if (imCorner)
+        {
+            if (allowPassage == posPassAllowed[0])
+            {
+                if (roll == 1)
+                {
+                    allowPassage = enterFromAllowed[0];
+                }
+                else
+                {
+                    allowPassage = enterFromAllowed[1];
+                }
+            }
+        }
+
 
         for (int i = 0; i < 3; i++)
         {
@@ -100,19 +117,29 @@ public class StreetLightController : MonoBehaviour
         {
             SetLightBulbColor(Allow.North, 2, 3);
             SetLightBulbColor(Allow.West, 0, 1);
+            if (imCorner)
+            {
+                SetLightBulbColor(Allow.West, 0, 0);
+            }
         }
         else
         {
             SetLightBulbColor(Allow.West, 2, 3);
             SetLightBulbColor(Allow.North, 0, 1);
+            if (imCorner)
+            {
+                SetLightBulbColor(Allow.North, 0, 0);
+            }
         }
 
 
-
-        float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
-        waitingDur = setWait;
-        timeOfLastSwitch = Time.time;
-        StartCoroutine(WaitToSwitchLightsAgain(setWait));
+        if (!imCorner)
+        {
+            float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
+            waitingDur = setWait;
+            timeOfLastSwitch = Time.time;
+            StartCoroutine(WaitToSwitchLightsAgain(setWait));
+        }
     }
     bool isBlocked(string desc)
     {
