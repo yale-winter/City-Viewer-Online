@@ -13,7 +13,7 @@ public class Load : MonoBehaviour
     IEnumerator LoadMain()
     {
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("CubeCityScene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("CityViewerOnline");
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)

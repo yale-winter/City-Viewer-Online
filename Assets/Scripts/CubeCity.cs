@@ -402,12 +402,22 @@ public class CubeCity : MonoBehaviour
                     instanceCPC.transform.position = freewayPos;
                     instanceCPC.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
                     PathCreator cPCScript = instanceCPC.AddComponent<PathCreator>();
-                    
+                    cPCScript.bezierPath = freewayBP;
+
+
+                    GameObject instanceCPC2 = new GameObject("Car2PathCreat " + carControllers.Count);
+                    instanceCPC2.transform.parent = parentCarPaths;
+                    instanceCPC2.transform.position = freewayPos2;
+                    instanceCPC2.transform.localEulerAngles = new Vector3(0.0f, 270.0f, 0.0f);
+                    PathCreator cPCScript2 = instanceCPC2.AddComponent<PathCreator>();
+                    cPCScript2.bezierPath = freewayBP2;
+
+
                     cPCScript.bezierPath = freewayBP;
                     //cPCScript.bezierPath.AutoControlLength = 0.01f;
 
                     // end car path stuff
-                    int createThisManyCarsBlock = 2;//Random.Range(0,2);
+                    int createThisManyCarsBlock = Random.Range(0,2);
                     /*
                     if (sIndxAdjList[0] == 0 && sIndxAdjList[1] == 0)
                     {
@@ -425,7 +435,7 @@ public class CubeCity : MonoBehaviour
 
                         // car model
                         int instanceIndx = carControllers.Count;
-                        CarModel instanceCarModel = new CarModel(instanceIndx, 14.0f);
+                        CarModel instanceCarModel = new CarModel(instanceIndx, 6.0f);
 
                         // car path follower
                         
@@ -438,7 +448,8 @@ public class CubeCity : MonoBehaviour
 
                         // car controller
                         CarController instanceCC = instanceCar.AddComponent<CarController>();
-                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, cPCScript, freewayBP2);
+                        Vector3 enterFwyPos = freewayPos2 + new Vector3(-1.46f, 0.0f, -0.51f);
+                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, cPCScript, cPCScript2, enterFwyPos);
                         carControllers.Add(instanceCC);
                     }
                 }

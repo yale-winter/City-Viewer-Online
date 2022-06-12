@@ -10,6 +10,7 @@ public class StreetLightController : MonoBehaviour
     public StreetLightModel sLM;
     public Allow allowPassage = Allow.None;
     public Allow[] posPassAllowed = new Allow[2];
+    public Allow[] enterFromAllowed = new Allow[2];
     [Tooltip("delay to switch the lights")]
     private Vector2 delayMinMax = new Vector2(4.0F,10.0F);
     private float yellowLightDelay = 2.0F;
@@ -43,24 +44,29 @@ public class StreetLightController : MonoBehaviour
         {
             freewayEntrance = true;
         }
-        
+
 
         posPassAllowed[0] = Allow.East;
         posPassAllowed[1] = Allow.North;
 
+
         if (flip[0])
         {
-          //  Debug.Log("flip 0");
+            //  Debug.Log("flip 0");
             posPassAllowed[0] = Allow.West;
             setSSLV.xLights[0].transform.parent.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
         }
-        
+
         if (flip[1])
         {
             //Debug.Log("flip 1");
             posPassAllowed[1] = Allow.South;
             setSSLV.zLights[0].transform.parent.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
         }
+
+        // actual drive in entrances
+        enterFromAllowed[0] = posPassAllowed[0];
+        enterFromAllowed[1] = posPassAllowed[1];
 
         // removed blocked from options
         if (isBlocked(posPassAllowed[0].ToString()))
@@ -77,40 +83,29 @@ public class StreetLightController : MonoBehaviour
         posPassAllowedS[0] = posPassAllowed[0].ToString();
         posPassAllowedS[1] = posPassAllowed[1].ToString();
 
-
-
-        /*
-        if (flipAxis)
-        {
-            setSSLV.pivotLight.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
-        }
-        */
-
-
-        allowPassage = Allow.North;
+        allowPassage = enterFromAllowed[0];
         float roll = UnityEngine.Random.Range(0, 2);
-        /*
-        if (roll == 0)
+        if (roll == 1)
         {
-            allowPassage = Allow.NorthWest;
+            allowPassage = enterFromAllowed[1];
         }
+
+
         for (int i = 0; i < 3; i++)
         {
-            SetLightBulbColor(Allow.SouthEast, i, 0);
-            SetLightBulbColor(Allow.NorthWest, i, 0);
+            SetLightBulbColor(Allow.North, i, 0);
+            SetLightBulbColor(Allow.West, i, 0);
         }
-        if (allowPassage == Allow.NorthWest)
+        if (allowPassage == Allow.North || allowPassage == Allow.South)
         {
-            SetLightBulbColor(Allow.SouthEast, 2, 3);
-            SetLightBulbColor(Allow.NorthWest, 0, 1);
+            SetLightBulbColor(Allow.North, 2, 3);
+            SetLightBulbColor(Allow.West, 0, 1);
         }
         else
         {
-            SetLightBulbColor(Allow.NorthWest, 2, 3);
-            SetLightBulbColor(Allow.SouthEast, 0, 1);
+            SetLightBulbColor(Allow.West, 2, 3);
+            SetLightBulbColor(Allow.North, 0, 1);
         }
-        */
-
 
 
 
@@ -121,7 +116,8 @@ public class StreetLightController : MonoBehaviour
     }
     bool isBlocked(string desc)
     {
-        for (int i = 0; i < blocked.Count; i++) {
+        for (int i = 0; i < blocked.Count; i++)
+        {
             if (desc == blocked[i])
             {
                 return true;
@@ -133,41 +129,47 @@ public class StreetLightController : MonoBehaviour
     public IEnumerator SwitchLights()
     {
         yield return 0;
-        Allow setA = Allow.South;
-        /*
-        
-        if (allowPassage == Allow.SouthEast)
-        {
-            setA = Allow.NorthWest;
-        }
-        if (setA == Allow.SouthEast)
-        {
-            SetLightBulbColor(Allow.SouthEast, 2, 0);
-            SetLightBulbColor(Allow.SouthEast, 1, 2);
-            yield return new WaitForSeconds(yellowLightDelay);
-            SetLightBulbColor(Allow.SouthEast, 1, 0);
-            SetLightBulbColor(Allow.SouthEast, 0, 1);
-            SetLightBulbColor(Allow.NorthWest, 0, 0);
-            SetLightBulbColor(Allow.NorthWest, 2, 3);
-        }
-        else
-        {
-            SetLightBulbColor(Allow.NorthWest, 2, 0);
-            SetLightBulbColor(Allow.NorthWest, 1, 2);
-            yield return new WaitForSeconds(yellowLightDelay);
-            SetLightBulbColor(Allow.NorthWest, 1, 0);
-            SetLightBulbColor(Allow.NorthWest, 0, 1);
-            SetLightBulbColor(Allow.SouthEast, 0, 0);
-            SetLightBulbColor(Allow.SouthEast, 2, 3);
-        }
-        */
 
-        carsWaitingHere = 0;
-        allowPassage = setA;
-        float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
-        waitingDur = setWait;
-        timeOfLastSwitch = Time.time;
-        StartCoroutine(WaitToSwitchLightsAgain(setWait));
+        if (enterFromAllowed[0] != enterFromAllowed[1])
+        {
+            Allow setA = enterFromAllowed[1];
+            if (allowPassage == enterFromAllowed[0])
+            {
+                setA = enterFromAllowed[1];
+            }
+            else
+            {
+                setA = enterFromAllowed[0];
+            }
+
+            if (setA == Allow.West || setA == Allow.East)
+            {
+                SetLightBulbColor(Allow.North, 2, 0);
+                SetLightBulbColor(Allow.North, 1, 2);
+                yield return new WaitForSeconds(yellowLightDelay);
+                SetLightBulbColor(Allow.North, 1, 0);
+                SetLightBulbColor(Allow.North, 0, 1);
+                SetLightBulbColor(Allow.West, 0, 0);
+                SetLightBulbColor(Allow.West, 2, 3);
+            }
+            else
+            {
+                SetLightBulbColor(Allow.West, 2, 0);
+                SetLightBulbColor(Allow.West, 1, 2);
+                yield return new WaitForSeconds(yellowLightDelay);
+                SetLightBulbColor(Allow.West, 1, 0);
+                SetLightBulbColor(Allow.West, 0, 1);
+                SetLightBulbColor(Allow.North, 0, 0);
+                SetLightBulbColor(Allow.North, 2, 3);
+            }
+
+            allowPassage = setA;
+            carsWaitingHere = 0;
+            float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
+            waitingDur = setWait;
+            timeOfLastSwitch = Time.time;
+            StartCoroutine(WaitToSwitchLightsAgain(setWait));
+        }
     }
     private IEnumerator WaitToSwitchLightsAgain(float thisWait)
     {
@@ -193,9 +195,10 @@ public class StreetLightController : MonoBehaviour
         {
             string travelOK = allowPassage.ToString();
             int carID = int.Parse(carName.Substring(4));
-            float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + carsWaitingHere*1.2f;
+            //float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + carsWaitingHere * 1.2f;
+            float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay;
 
-            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x,0.05f,transform.position.z), freewayEntrance);
+            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z), freewayEntrance);
         }
         carsWaitingHere++;
     }
