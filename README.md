@@ -1,15 +1,15 @@
 # City-Viewer-Online
 WebGL, C#, SQL, PHP, Database, Unity
 
-View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityviewer/ "City Viewer Online") (WebGL Browser from desktop only)
+View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityviewer/ "City Viewer Online") (WebGL Browser from desktop)
 
 ![cityviewer_1_1](https://user-images.githubusercontent.com/5803874/172551401-658372e4-45ee-4412-b6e4-d622d0a05f37.jpg)
 
 ## Overview:
-Procedurally generate Cube City with manhattan style skyscrapers, roads, cars, stoplights, and helicopters of "ANY SIZE"!
+Procedurally generate a city with skyscrapers, roads, cars, stoplights, helicopters, freeway entrance and exits. Using no art assets only scaled cube primitives.
 
 **Features:**
-- Grey cube primitives are procedurally instantiated, scaled and positioned to look like manhattan style buildings for each block
+- Cube primitives are procedurally instantiated, scaled and positioned as buildings for each block
 - Roads are drawn between the blocks
 - Stoplights are placed at the intersections
 - Cars that drive around on the one-way roads, stop at red stoplights, and go on green
