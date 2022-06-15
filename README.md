@@ -6,7 +6,7 @@ View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityvi
 ![cityviewer_1_1](https://user-images.githubusercontent.com/5803874/172551401-658372e4-45ee-4412-b6e4-d622d0a05f37.jpg)
 
 ## Overview:
-Procedurally generate a city with skyscrapers, roads, cars, stoplights, helicopters, freeway entrance and exits. Using no art assets only scaled cube primitives.
+Procedurally generate a city with skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives.
 
 **Features:**
 - Cube primitives are procedurally instantiated, scaled and positioned as buildings for each block
