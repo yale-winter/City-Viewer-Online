@@ -32,8 +32,6 @@ public class CityBlock : MonoBehaviour
     }
     private void GenerateCityBlock()
     {
-        //dev
-        return;
         blockParent = new GameObject("Parent Buildings").transform;
         blockParent.parent = transform;
 

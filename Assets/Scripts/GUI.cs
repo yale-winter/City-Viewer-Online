@@ -38,6 +38,8 @@ public class GUI : MonoBehaviour
     public Text curCityNameExtra;
     public Text aboveCityText;
 
+    public Text[] advText = new Text[3];
+
     public void DBLoaded(Scores data)
     {
         mainCanvas.SetActive(true);
@@ -103,8 +105,6 @@ public class GUI : MonoBehaviour
             createCityMenu.SetActive(true);
             Time.timeScale = 0.0f;
             pauseDarken.SetActive(true);
-
-
             Color32 randColor = new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255);
 
             customColorSwatch.color = randColor;
@@ -122,10 +122,6 @@ public class GUI : MonoBehaviour
         {
             createCityExpandBut.SetActive(true);
             createCityMenu.SetActive(false);
-
-
-
-
             colorPickerP.SetActive(false);
             pauseDarken.SetActive(false);
             Time.timeScale = 1.0f;
@@ -142,14 +138,31 @@ public class GUI : MonoBehaviour
         // adjust for index number
         thisSlider--;
 
-        if (positive)
+
+        if (thisSlider == 0)
         {
-            sliders[thisSlider].value += nudgeAmount;
+            if (positive)
+            {
+                sliders[thisSlider].value += 0.5f;
+            }
+            else
+            {
+                sliders[thisSlider].value -= 0.5f;
+            }
         }
         else
         {
-            sliders[thisSlider].value -= nudgeAmount;
+
+            if (positive)
+            {
+                sliders[thisSlider].value += nudgeAmount;
+            }
+            else
+            {
+                sliders[thisSlider].value -= nudgeAmount;
+            }
         }
+
         sliders[thisSlider].value = Mathf.Clamp(sliders[thisSlider].value, 0.0f, 1.0f);
     }
     public void SelectColorPressed()
@@ -198,4 +211,25 @@ public class GUI : MonoBehaviour
         }
         return str;
     }
+    private void Update()
+    {
+        if (showingCreateMenu)
+        {
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                sliders[0].value = Mathf.RoundToInt(sliders[0].value * 2.0f) / 2.0f;
+
+            }
+
+
+            advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString();
+            advText[1].text = XHelpers.heliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
+            advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString();
+
+
+
+        }
+    }
+
 }

@@ -136,25 +136,14 @@ public class CubeCity : MonoBehaviour
         if (loadOnline)
         {
             // import data from most recent save
-            numCityBlocksXZ = new Vector2Int(3, 3);
-            float sizeMult = data.citySize[loadIndex] / 100.0f;
-            Vector2Int addToSize = new Vector2Int((int)Mathf.Round(3.0f * sizeMult), (int)Mathf.Round(5.0f * sizeMult));
-            numCityBlocksXZ += addToSize;
-            if (numCityBlocksXZ.x % 2 != 0)
-            {
-                numCityBlocksXZ.x++;
-            }
-            if (numCityBlocksXZ.y % 2 != 0)
-            {
-                numCityBlocksXZ.y++;
-            }
-            Debug.Log("loaded num city blocks: " + numCityBlocksXZ + " size mult: " + sizeMult);
+            numCityBlocksXZ = XHelpers.sizeFromLoadSettings(data.citySize[loadIndex]);
 
-            float heliMult = data.helicopters[loadIndex] / 100.0f;
-            helicoptersAvgPerBlock = heliMult * 0.5f;
+            Debug.Log("loaded num city blocks: " + numCityBlocksXZ.x + " , " + numCityBlocksXZ.y);
 
-            float scrapersMult = data.scrapers[loadIndex] / 100.0f;
-            superSkyScrapersAvgPerBlock = Mathf.Max(0.01f, scrapersMult);
+            helicoptersAvgPerBlock = XHelpers.heliFromLoadSettings(data.helicopters[loadIndex]);
+
+            superSkyScrapersAvgPerBlock = XHelpers.scrapFromLoadSettings(data.scrapers[loadIndex]);
+
 
             string loadColorStr = PadZeros(data.cityColor[loadIndex].ToString(), 9);
             //loadColorStr = "000000000";
@@ -331,7 +320,6 @@ public class CubeCity : MonoBehaviour
                     Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
                     instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this);
 
-
                     allCityBlocks.Add(instanceCityBlockGO);
                     //Debug.Log("instanceSetSize: " + instanceSetSize);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
@@ -339,18 +327,9 @@ public class CubeCity : MonoBehaviour
                     setInstancePos += new Vector3(cityBlockSizeXZ[0] / 2.0F, 0.0F, cityBlockSizeXZ[1] / -2.0F);
                     instanceCityBlockGO.transform.position = setInstancePos;
 
-                    // create road ring around the block - - - - - - - -
-
-
-
-
-
-
                     GameObject instanceRoad = new GameObject("straight road");
                     instanceRoad.transform.parent = instanceCityBlockGO.transform;
                     PathCreation.PathCreator newPath = instanceRoad.AddComponent<PathCreation.PathCreator>();
-
-
 
                     //newPath
                     List<Vector3> pathPoints = new List<Vector3>();
@@ -385,24 +364,13 @@ public class CubeCity : MonoBehaviour
                     instanceRoadMesh.undersideMaterial = roadMat;
                     instanceRoadMesh.roadWidth = 0.6f;
 
-
-                    //cPCScript.bezierPath.AutoControlLength = 0.01f;
-
                     // end car path stuff
                     int createThisManyCarsBlock = Random.Range(0, 2);
-                    /*
-                    if (sIndxAdjList[0] == 0 && sIndxAdjList[1] == 0)
-                    {
-                        createThisManyCarsBlock = 1;
-                    }
-                    */
+
                     if (carsTotal >= 12)
                     {
                         createThisManyCarsBlock = 0;
                     }
-
-                    //dev
-                    createThisManyCarsBlock = 2;
 
                     // Debug.Log("create this many cars block: " + createThisManyCarsBlock);
                     for (int i = 0; i < createThisManyCarsBlock; i++)
