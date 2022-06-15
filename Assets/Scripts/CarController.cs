@@ -8,11 +8,11 @@ using System.Collections.Generic;
 [Serializable]
 public class CarController : MonoBehaviour
 {
+
     public int iD;
     public GameObject car;
     public CarModel carModel;
-    public PathCreator carPC;
-    public PathCreator carPC2;
+
     public bool crossingIntersection = false;
     public bool waitingIntersection = false;
     public bool lerpingPos = false;
@@ -21,7 +21,9 @@ public class CarController : MonoBehaviour
     public string[] posPassS = new string[2];
     bool leavingTown = false;
 
-    public BezierPath freewayEntrancePath;
+
+
+    public GameObject inFrontDet;
 
 
     /// <summary>
@@ -32,31 +34,30 @@ public class CarController : MonoBehaviour
     };
 
 
-    Vector3 freewayExitPos = new Vector3(0.32f, 0.05f, -20.0f);
-    Vector3 enterFreewayPos = new Vector3(0.0f, 0.0f, 0.0f);
+
     Quaternion normalCarQ = Quaternion.identity;
     float spawnTime = 0.0f;
-    public void SetUp(int setID, GameObject setCar, CarModel setModel, PathCreator setPC, PathCreator setPC2, Vector3 setEnterFreewayPos, string instantDirection)
+    public void SetUp(int setID, GameObject setCar, CarModel setModel, string instantDirection)
     {
+
         spawnTime = Time.time;
-        enterFreewayPos = setEnterFreewayPos;
+
         normalCarQ.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
 
         iD = setID;
         car = setCar;
         carModel = setModel;
-        carPC = setPC;
-        carPC2 = setPC2;
 
         CarFrontCollider carFrontCol = car.transform.Find("InFrontDet").GetComponent<CarFrontCollider>();
         carFrontCol.SetUp(this);
+        inFrontDet = carFrontCol.gameObject;
 
         lSpeed = carModel.speed;
 
         InstantDirection(instantDirection);
 
     }
-    public void ApproachIntersection(int intersectionID, string travelOK, float possibleWait, string[] setPosPassS, Vector3 interPos, bool freewayEntrance)
+    public void ApproachIntersection(int intersectionID, string travelOK, float possibleWait, string[] setPosPassS, Vector3 interPos)
     {
         if (spawnTime + 1.0f < Time.time)
         {
@@ -111,7 +112,7 @@ public class CarController : MonoBehaviour
 
 
                 //possibleWait = 0.0f;
-                StartCoroutine(CrossIntersection(possibleWait, interPos, freewayEntrance));
+                StartCoroutine(CrossIntersection(possibleWait, interPos));
                 //}
                 // Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
             }
@@ -137,24 +138,16 @@ public class CarController : MonoBehaviour
         }
         return thisDir;
     }
-    private IEnumerator CrossIntersection(float waitTime, Vector3 interPos, bool freewayEntrance)
+    private IEnumerator CrossIntersection(float waitTime, Vector3 interPos)
     {
+
+        inFrontDet.SetActive(false);
+        ChangeSpeed(0.0f);
+        yield return new WaitForSeconds(waitTime*0.5f);
         waitingIntersection = true;
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime*0.5f);
         waitingIntersection = false;
         crossingIntersection = true;
-
-        bool enterFreeway = false;
-        if (freewayEntrance)
-        {
-            int rollForFreeway = UnityEngine.Random.Range(0, 2);
-            if (rollForFreeway == 1)
-            {
-                enterFreeway = true;
-
-            }
-            yield return 0;
-        }
 
         int rollForDir = UnityEngine.Random.Range(0, 2);
         // decide direction (opposite of passage dir)
@@ -162,10 +155,7 @@ public class CarController : MonoBehaviour
         Vector3 exitPos = new Vector3();
         float[] newDir = new float[2];
         float[] setDir = getDirFromCDir(posPassS[rollForDir]);
-        if (enterFreeway)
-        {
-            setDir = new float[] { 1, 0 };
-        }
+
         bool turning = false;
         bool turnLeft = true;
         if (moveDir[0] != setDir[0] || moveDir[1] != setDir[1])
@@ -188,63 +178,44 @@ public class CarController : MonoBehaviour
             {
                 turnLeft = false;
             }
-
-
             exitPos = exitIntersectionPos(setDir, interPos);
-
         }
 
-
-
-        if (enterFreeway)
+        if (turning)
+            ChangeSpeed(carModel.speed / 10.0f);
+        yield return new WaitForSeconds(1.4f / carModel.speed);
+        if (turning)
         {
-            /*
-            LerpMoveFromTo(car.transform.position, enterFreewayPos);
-            while (lerpingPos)
+            if (turnLeft)
             {
-                yield return 0;
-            }*/
+                LerpRotFromTo(new Vector3(90.0f, 0.0f, 0.0f));
+            }
+            else
+            {
+                LerpRotFromTo(new Vector3(-90.0f, 0.0f, 0.0f));
+            }
+            // Debug.Log("turn left: " + turnLeft);
+        }
+        yield return new WaitForSeconds(0.7f / carModel.speed);
+        if (turning)
+        {
             moveDir[0] = setDir[0];
             moveDir[1] = setDir[1];
-            crossingIntersection = false;
-            EnterFreeway();
+
+            LerpMoveFromTo(car.transform.position, exitPos);
+
         }
-        else
-        {
+        yield return new WaitForSeconds(2.0f / carModel.speed);
+        if (turning)
+            ChangeSpeed(carModel.speed);
+        
+        
+        //yield return new WaitForSeconds(2.0f / carModel.speed);
+        //car.transform.Find("CarBody1").gameObject.SetActive(true);
 
+        crossingIntersection = false;
+        inFrontDet.SetActive(true);
 
-            if (turning)
-                ChangeSpeed(carModel.speed / 10.0f);
-            yield return new WaitForSeconds(1.4f / carModel.speed);
-            if (turning)
-            {
-                if (turnLeft)
-                {
-                    LerpRotFromTo(new Vector3(90.0f, 0.0f, 0.0f));
-                }
-                else
-                {
-                    LerpRotFromTo(new Vector3(-90.0f, 0.0f, 0.0f));
-                }
-                // Debug.Log("turn left: " + turnLeft);
-            }
-            yield return new WaitForSeconds(0.7f / carModel.speed);
-            if (turning)
-            {
-                moveDir[0] = setDir[0];
-                moveDir[1] = setDir[1];
-
-                LerpMoveFromTo(car.transform.position, exitPos);
-
-            }
-            yield return new WaitForSeconds(2.0f / carModel.speed);
-            if (turning)
-                ChangeSpeed(carModel.speed);
-            yield return new WaitForSeconds(2.0f / carModel.speed);
-            //car.transform.Find("CarBody1").gameObject.SetActive(true);
-
-            crossingIntersection = false;
-        }
     }
 
     private IEnumerator SlowDown(float waitAfter)
@@ -279,10 +250,17 @@ public class CarController : MonoBehaviour
 
         return dir;
     }
+    bool runCUB = false;
     private IEnumerator CheckUnblocked()
     {
-        yield return new WaitForSeconds(0.2f);
+        runCUB = true;
+        yield return new WaitForSeconds(0.3f);
+        inFrontDet.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
         ChangeSpeed(carModel.speed);
+        //waitingIntersection = false;
+        runCUB = false;
+        
     }
     private IEnumerator changeSpeedCR;
     private bool changeSpeedCRRunning = false;
@@ -304,7 +282,7 @@ public class CarController : MonoBehaviour
         // Debug.Log("change speed to: " + targetSpeed);
         changeSpeedCRRunning = true;
         bool updated = true;
-        float newSpeed = car.GetComponent<PathFollower>().speed;
+        float newSpeed = lSpeed;
         while (updated)
         {
             updated = false;
@@ -315,57 +293,19 @@ public class CarController : MonoBehaviour
             }
             else if (newSpeed > targetSpeed + speedThresh)
             {
-                newSpeed -= speedInc * Time.deltaTime * 2.0f;
+                newSpeed -= speedInc * Time.deltaTime * 10.0f;//2.0f;
                 updated = true;
             }
             newSpeed = Mathf.Clamp(newSpeed, 0.0f, carModel.speed);
-            car.GetComponent<PathFollower>().speed = newSpeed;
             lSpeed = newSpeed;
             yield return 0;
         }
-        car.GetComponent<PathFollower>().speed = targetSpeed;
         lSpeed = targetSpeed;
         changeSpeedCRRunning = false;
     }
     Vector3 exitStartPos;
     Quaternion exitStartQ;
-    public void ExitFreeway()
-    {
-        if (!leavingTown)
-        {
-            car.transform.localRotation = normalCarQ;
-            car.GetComponent<PathFollower>().enabled = false;
-            pathControlled = false;
-        }
-        else
-        {
-            leavingTown = false;
-            car.GetComponent<PathFollower>().pathCreator = carPC;
-            car.GetComponent<PathFollower>().distanceTravelled = 0;
-            car.GetComponent<PathFollower>().onFreeway = true;
-        }
-        //exitStartPos = car.transform.position;
-        //exitStartQ = car.transform.rotation;
-        //LerpMoveFromTo(exitStartPos, freewayExitPos);
-        //car.transform.localRotation = Quaternion.Lerp(exitStartQ, normalCarQ, p);
 
-    }
-    public void EnterFreeway()
-    {
-
-
-        leavingTown = true;
-        car.GetComponent<PathFollower>().pathCreator = carPC2;
-
-        crossingIntersection = false;
-        waitingIntersection = false;
-        lerpingPos = false;
-        car.GetComponent<PathFollower>().enabled = true;
-        car.GetComponent<PathFollower>().distanceTravelled = 0;
-        car.GetComponent<PathFollower>().onFreeway = true;
-
-        pathControlled = true;
-    }
 
 
     IEnumerator moveCR;
@@ -443,9 +383,6 @@ public class CarController : MonoBehaviour
                 p = 1.0f;
             }
             car.transform.position = Vector3.Lerp(from, to, p);
-
-
-
             yield return 0;
         }
 
@@ -483,7 +420,7 @@ public class CarController : MonoBehaviour
         }
         else if (dir == "East")
         {
-            
+
             moveDir[0] = 1.0f;
             moveDir[1] = 0.0f;
         }
@@ -494,5 +431,16 @@ public class CarController : MonoBehaviour
             moveDir[1] = 0.0f;
         }
     }
-
+    public void TrafficJam()
+    {
+        ChangeSpeed(0.0f);
+        //lSpeed = 0.0f;
+        //waitingIntersection = true;
+        inFrontDet.SetActive(false);
+        if (runCUB)
+        {
+            StopCoroutine(CheckUnblocked());
+        }
+        StartCoroutine(CheckUnblocked());
+    }
 }

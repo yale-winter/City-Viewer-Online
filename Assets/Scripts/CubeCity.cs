@@ -8,11 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class CubeCity : MonoBehaviour
 {
+
+
     public List<GameObject> allCityBlocks = new List<GameObject>();
-    public GameObject freewayPath;
-    Vector3 freewayPos = new Vector3(-5.5f, 0.0f, -10.3f);
-    public GameObject freewayPath2;
-    Vector3 freewayPos2 = new Vector3(101.0f, 0.0f, -18.39f);
+
     /// <summary>
     /// number of city blocks to use in X and Z
     /// </summary>
@@ -51,7 +50,7 @@ public class CubeCity : MonoBehaviour
     private Transform parentHeliPaths;
     private Transform parentCarPaths;
 
-    private float stopLightDetectionSize = 1.25f;
+    private float stopLightDetectionSize = 2.0f;//1.25f;
 
     /// <summary>
     /// adjancency matrix of street lights / intersections
@@ -177,7 +176,7 @@ public class CubeCity : MonoBehaviour
             }
             */
             // end import data
-            freewayPos2 = new Vector3((numCityBlocksXZ.x - 1) * cityBlockSizeXZ.x, freewayPos2.y, freewayPos2.z);
+
         }
 
         viewPos1 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
@@ -186,7 +185,7 @@ public class CubeCity : MonoBehaviour
 
         cameraTarget.position = viewPos1;
         camP.position = cameraTarget.position;
-        CreateFreeways();
+
         SpawnStopLights();
 
         SpawnCubeCity(new Vector2Int(0, 0));
@@ -273,8 +272,9 @@ public class CubeCity : MonoBehaviour
                 }
             }
 
-            int freewayEntranceID = numCityBlocksXZ[0] * 3 - 1;
-            instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this, flipLightAxis, blocked, isCorner, freewayEntranceID);
+
+
+            instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this, flipLightAxis, blocked, isCorner);
             streetLightControllers.Add(instanceSLC);
 
 
@@ -297,42 +297,7 @@ public class CubeCity : MonoBehaviour
             }
         }
     }
-    GameObject instanceFreeway;
-    GameObject instanceFreeway2;
-    BezierPath freewayBP;
-    BezierPath freewayBP2;
-    void CreateFreeways()
-    {
-        // enter city freeway
-        instanceFreeway = Instantiate(freewayPath);
-        instanceFreeway.transform.name = "freeway";
-        instanceFreeway.transform.position = freewayPos;
-        instanceFreeway.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
-        // road mesh
-        RoadMeshCreator instanceRoadMesh = instanceFreeway.AddComponent<RoadMeshCreator>();
-        instanceRoadMesh.roadMaterial = roadMat;
-        instanceRoadMesh.undersideMaterial = roadMat;
-        instanceRoadMesh.roadWidth = 0.6f;
 
-        freewayBP = new BezierPath(Vector3.zero);
-        freewayBP = instanceFreeway.GetComponent<PathCreator>().bezierPath;
-
-
-        // exit city freeway
-        instanceFreeway2 = Instantiate(freewayPath2);
-        instanceFreeway2.transform.name = "freeway2";
-        instanceFreeway2.transform.position = freewayPos2;
-        instanceFreeway2.transform.localEulerAngles = new Vector3(0.0f, 270.0f, 0.0f);
-        // road mesh
-        RoadMeshCreator instanceRoadMesh2 = instanceFreeway2.AddComponent<RoadMeshCreator>();
-        instanceRoadMesh2.roadMaterial = roadMat;
-        instanceRoadMesh2.undersideMaterial = roadMat;
-        instanceRoadMesh2.roadWidth = 0.6f;
-
-        freewayBP2 = new BezierPath(Vector3.zero);
-        freewayBP2 = instanceFreeway2.GetComponent<PathCreator>().bezierPath;
-
-    }
     private void SpawnCubeCity(Vector2Int sIndxAdjList)
     {
         if (sIndxAdjList[1] < numCityBlocksXZ[1])
@@ -360,7 +325,7 @@ public class CubeCity : MonoBehaviour
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
 
                     //Debug.Log("instanceSetSize: " + instanceSetSize);
-                    
+
 
 
                     Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
@@ -421,25 +386,6 @@ public class CubeCity : MonoBehaviour
                     instanceRoadMesh.roadWidth = 0.6f;
 
 
-
-                    // car path
-                    GameObject instanceCPC = new GameObject("CarPathCreat " + carControllers.Count);
-                    instanceCPC.transform.parent = parentCarPaths;
-                    instanceCPC.transform.position = freewayPos;
-                    instanceCPC.transform.localEulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
-                    PathCreator cPCScript = instanceCPC.AddComponent<PathCreator>();
-                    cPCScript.bezierPath = freewayBP;
-
-
-                    GameObject instanceCPC2 = new GameObject("Car2PathCreat " + carControllers.Count);
-                    instanceCPC2.transform.parent = parentCarPaths;
-                    instanceCPC2.transform.position = freewayPos2;
-                    instanceCPC2.transform.localEulerAngles = new Vector3(0.0f, 270.0f, 0.0f);
-                    PathCreator cPCScript2 = instanceCPC2.AddComponent<PathCreator>();
-                    cPCScript2.bezierPath = freewayBP2;
-
-
-                    cPCScript.bezierPath = freewayBP;
                     //cPCScript.bezierPath.AutoControlLength = 0.01f;
 
                     // end car path stuff
@@ -454,6 +400,7 @@ public class CubeCity : MonoBehaviour
                     {
                         createThisManyCarsBlock = 0;
                     }
+
                     //dev
                     createThisManyCarsBlock = 2;
 
@@ -469,17 +416,7 @@ public class CubeCity : MonoBehaviour
                         int instanceIndx = carControllers.Count;
                         CarModel instanceCarModel = new CarModel(instanceIndx, 6.0f);
 
-                        // car path follower
 
-                        PathFollower instancePF = instanceCar.AddComponent<PathFollower>();
-                        instancePF.pathCreator = cPCScript;
-                        instancePF.speed = instanceCarModel.speed;
-                        instancePF.carID = instanceIndx;
-                        instancePF.onFreeway = true;
-
-
-                        // ?
-                        instancePF.enabled = false;
                         instanceCar.transform.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
 
 
@@ -493,10 +430,9 @@ public class CubeCity : MonoBehaviour
                         //thisPos += new Vector3(2.0f, 0.0f, 0.0f);
                         instanceCar.transform.position = thisPos;
 
-                        Vector3 enterFwyPos = freewayPos2 + new Vector3(-1.46f, 0.0f, -0.51f);
 
 
-                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, cPCScript, cPCScript2, enterFwyPos, streetLightControllers[rollSL].posPassAllowed[0].ToString());//enterFwyPos
+                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, streetLightControllers[rollSL].posPassAllowed[0].ToString());//enterFwyPos
                         carControllers.Add(instanceCC);
                         carsTotal++;
                     }
@@ -719,20 +655,28 @@ public class CubeCity : MonoBehaviour
         }
         return str;
     }
-    public void CarExitFreeway(int carID)
-    {
-        carControllers[carID].ExitFreeway();
-        //Debug.Log("car exit freeway " + carID);
-    }
+
     private void Update()
+    {
+        for (int i = 0; i < carControllers.Count; i++)
+        {
+            carControllers[i].PossiblyMove();
+        }
+    }
+    private void LateUpdate()
     {
         if (camViewCurMax.x == 1)
         {
             cameraTarget.transform.position = cameraMovingTarget.transform.position;
         }
-        for (int i = 0; i < carControllers.Count; i++)
+    }
+
+    public void CarTrafficJam(string carName)
+    {
+        if (carName.Substring(0, 3) == "car")
         {
-            carControllers[i].PossiblyMove();
+            int carID = int.Parse(carName.Substring(4));
+            carControllers[carID].TrafficJam();
         }
     }
 }

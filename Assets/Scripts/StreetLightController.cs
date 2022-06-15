@@ -23,10 +23,10 @@ public class StreetLightController : MonoBehaviour
     private int flipAxis = 0;
     string[] posPassAllowedS = new string[2];
     public List<string> blocked = new List<string>();
-    public bool freewayEntrance = false;
+
     public bool imCorner = false;
 
-    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool[] flip, List<string> setBlocked, bool setCorner, int freewayEntranceID)
+    public void SetUp(IntersectionCollider setIC, SignStopLightView setSSLV, StreetLightModel setSLM, Color[] setSLColors, Material setBulbMat, CubeCity setCubeCity, bool[] flip, List<string> setBlocked, bool setCorner)
     {
         imCorner = setCorner;
         for (int i = 0; i < setBlocked.Count; i++)
@@ -41,11 +41,6 @@ public class StreetLightController : MonoBehaviour
         bulbMat = setBulbMat;
         cubeCity = setCubeCity;
 
-
-        if (sLM.iD == freewayEntranceID)
-        {
-            freewayEntrance = true;
-        }
 
 
         posPassAllowed[0] = Allow.East;
@@ -224,8 +219,7 @@ public class StreetLightController : MonoBehaviour
             int carID = int.Parse(carName.Substring(4));
             //float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + carsWaitingHere * 1.2f;
             float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay;
-
-            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z), freewayEntrance);
+            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z));
         }
         carsWaitingHere++;
     }

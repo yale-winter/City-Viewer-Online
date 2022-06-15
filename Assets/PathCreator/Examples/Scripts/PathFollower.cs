@@ -41,7 +41,6 @@ namespace PathCreation.Examples
                     {
                         onFreeway = false;
                         CubeCity cubeCity = GameObject.Find("CubeCity").GetComponent<CubeCity>();
-                        cubeCity.CarExitFreeway(carID);
                     }
                 }
 
