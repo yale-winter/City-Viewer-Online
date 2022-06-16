@@ -20,7 +20,6 @@ Procedurally generate a city with skyscrapers, roads, cars, stoplights, and heli
 
 ## Implementation
 ![Cube City diagram](https://user-images.githubusercontent.com/5803874/156256669-fc3db5f4-8708-4918-bf10-ecfbf9ab4b22.jpg)
-(From original version, not entire overview)
 
 - Most of the implementation details are outline out in the Diagram above
 - Most of the main elements call for and use the Model View Controller pattern (with the Models not using UnityEngine)
