@@ -8,14 +8,14 @@ public class CityBlock : MonoBehaviour
     {
         GenerateCityBlock();
     }
-    private Transform blockParent;
+    bool multiTone = false;
+    Transform blockParent;
     private float useWidth = 2.0F;
     private readonly float defaultUseWidth = 2.0F;
     public Vector2Int buildingsCurMax = new Vector2Int(0, 20);
     private Vector2 buildingLengthMinMax = new Vector2(1.0F, 6.0F);
     public Vector2 blockSize = new Vector2(10.0F,10.0F);
-    private Material mat;
-    private float noiseStrength = 0.1F;
+    private Material[] mat = new Material[3];
     public CubeCity cubeCity;
     [Tooltip("super skyscrapers here")]
     public List<GameObject> sSSHere = new List<GameObject>();
@@ -23,11 +23,25 @@ public class CityBlock : MonoBehaviour
     [Tooltip("helicopter path start objects")]
     public List<Transform> heliPathRefGOs = new List<Transform>();
 
-    public void SetUp(int maxBuildings, Vector2 instanceSize, Material setMat, CubeCity setCubeCity)
+    public void SetUp(int maxBuildings, Vector2 instanceSize, Material setMat, CubeCity setCubeCity, bool setMultiTone)
     {
+        multiTone = setMultiTone;
         buildingsCurMax[1] = maxBuildings;
         blockSize = new Vector2(instanceSize[0], instanceSize[1]);
-        mat = setMat;
+        mat[0] = setMat;
+        if (multiTone)
+        {
+            Material instanceMat = new Material(mat[0]);
+            float colNoise = 0.04f;
+            instanceMat.color += new Color(colNoise, colNoise, colNoise);
+            mat[1] = instanceMat;
+
+            Material instanceMat2 = new Material(mat[0]);
+            colNoise = -0.04f;
+            instanceMat2.color += new Color(colNoise, colNoise, colNoise);
+            mat[2] = instanceMat2;
+        }
+
         cubeCity = setCubeCity;
     }
     private void GenerateCityBlock()
@@ -48,14 +62,18 @@ public class CityBlock : MonoBehaviour
             {
                 buildingsCurMax[0]++;
                 GameObject newBuilding = Instantiate(cubeCity.cityBuilding);
+                if (multiTone){
+                int rollForMat = Random.Range(0, 3);
+                if (rollForMat == 1)
+                {
+                    newBuilding.GetComponent<MeshRenderer>().material = mat[1];
+                } else if (rollForMat == 2) {
+                    newBuilding.GetComponent<MeshRenderer>().material = mat[2];
+                }
+                }
                 Transform building = newBuilding.transform;
                 building.parent = blockParent;
-                /*
-                Material instanceMat = new Material(mat);
-                float colNoise = (Random.value - 0.5F) * noiseStrength;
-                instanceMat.color += new Color(colNoise, colNoise, colNoise);
-                building.GetComponent<MeshRenderer>().sharedMaterial = instanceMat;
-                */
+
                 float length = Mathf.Min(Random.Range(buildingLengthMinMax.x, buildingLengthMinMax.y), endZ - curZ);
                 
                 // always end on buildings
@@ -93,9 +111,7 @@ public class CityBlock : MonoBehaviour
                             {
                                 // objects for possible heli loops
                                 GameObject instanceHeliLoopGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
                                 Destroy(instanceHeliLoopGO.transform.GetComponent<MeshRenderer>());
-
                                 instanceHeliLoopGO.transform.parent = building;
                                 instanceHeliLoopGO.transform.name = "possible heli loop";
                                 float yPos = Random.Range(0.2F, 0.7F);

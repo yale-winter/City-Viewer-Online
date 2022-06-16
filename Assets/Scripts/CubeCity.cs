@@ -32,34 +32,34 @@ public class CubeCity : MonoBehaviour
     public Color[] sLColors = new Color[4];
     public Material bulbMat;
     public Material mat;
-    private int maxBuildingsInBlock = 250;
+    int maxBuildingsInBlock = 250;
 
     /// <summary>
     /// distance to give space for roads inbetween city blocks
     /// </summary>
-    private float roadBuffer = 2.0f;
+    float roadBuffer = 2.0f;
     public Material roadMat;
 
     // objects of cube city
     public Transform cameraTarget;
     public Transform camP;
-    private Vector2Int camViewCurMax = new Vector2Int(0, 3);
+    Vector2Int camViewCurMax = new Vector2Int(0, 3);
     public List<Vector3> cameraSettings = new List<Vector3>();
-    private Transform parentCubeCity;
-    private Transform parentCars;
-    private Transform parentHeliPaths;
-    private Transform parentCarPaths;
+    Transform parentCubeCity;
+    Transform parentCars;
+    Transform parentHeliPaths;
+    Transform parentCarPaths;
 
-    private float stopLightDetectionSize = 2.0f;//1.25f;
+    float stopLightDetectionSize = 2.0f;//1.25f;
 
     /// <summary>
     /// adjancency matrix of street lights / intersections
     /// </summary>
     [SerializeField]
-    private List<inCol> sLMatrix = new List<inCol>();
+    List<inCol> sLMatrix = new List<inCol>();
     public List<GameObject> streetLights = new List<GameObject>();
     [SerializeField]
-    private List<StreetLightController> streetLightControllers = new List<StreetLightController>();
+    List<StreetLightController> streetLightControllers = new List<StreetLightController>();
     public GameObject signStopLight;
     // cars
     public GameObject car;
@@ -68,30 +68,29 @@ public class CubeCity : MonoBehaviour
     public List<GameObject> superSkyScrapers = new List<GameObject>();
 
     // helicopters
-    private Transform parentHelis;
+    Transform parentHelis;
     public GameObject heli;
     [SerializeField]
     public List<HelicopterController> heliControllers = new List<HelicopterController>();
     public GameObject[] heliPaths = new GameObject[3];
 
-    private List<PathCreator> instancePathPrefabs = new List<PathCreator>();
+    List<PathCreator> instancePathPrefabs = new List<PathCreator>();
     public GameObject pathDetCheckPrefab;
     public GameObject displayText;
 
-    private Persist persist;
+    Persist persist;
     Vector3 viewPos1;
     Vector3 viewPos2;
 
     public GameObject cityBuilding;
 
-    private int carsTotal = 0;
+    int carsTotal = 0;
 
-    private GameObject cameraMovingTarget;
+    GameObject cameraMovingTarget;
 
 
     void Awake()
     {
-
         if (GameObject.Find("Persist") == null)
         {
             GameObject persistGO = new GameObject("Persist");
@@ -130,58 +129,30 @@ public class CubeCity : MonoBehaviour
     public int loadIndex = 0;
     public void CreateCubeCity(Scores data, bool loadOnline = true)
     {
-        //dev
-        //loadOnline = false;
-
         if (loadOnline)
         {
             // import data from most recent save
             numCityBlocksXZ = XHelpers.sizeFromLoadSettings(data.citySize[loadIndex]);
-
             Debug.Log("loaded num city blocks: " + numCityBlocksXZ.x + " , " + numCityBlocksXZ.y);
-
             helicoptersAvgPerBlock = XHelpers.heliFromLoadSettings(data.helicopters[loadIndex]);
-
             superSkyScrapersAvgPerBlock = XHelpers.scrapFromLoadSettings(data.scrapers[loadIndex]);
-
-
-            string loadColorStr = PadZeros(data.cityColor[loadIndex].ToString(), 9);
-            //loadColorStr = "000000000";
-            //loadColorStr = "255255255";
+            string loadColorStr = XHelpers.PadZeros(data.cityColor[loadIndex].ToString(), 9);
             Debug.Log("loadColorStr : " + loadColorStr);
             mat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
-            /*
-            roadMat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
-            float brightness = (roadMat.color.r + roadMat.color.g + roadMat.color.b) / 3.0f;
-            if (brightness < 0.5)
-            {
-                //Debug.Log("brighter roads");
-                roadMat.color += new Color32(40, 40, 40, 0);
-            }
-            else
-            {
-                //Debug.Log("darker roads");
-                roadMat.color -= new Color32(40, 40, 40, 0);
-            }
-            */
             // end import data
 
         }
 
         viewPos1 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
         viewPos2 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.7F, 25.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
-
-
         cameraTarget.position = viewPos1;
         camP.position = cameraTarget.position;
-
         SpawnStopLights();
-
         SpawnCubeCity(new Vector2Int(0, 0));
         StartCoroutine("AddHelicoptersSoon");
     }
     // spawn all the Stop Lights aka Intersections
-    private void SpawnStopLights()
+    void SpawnStopLights()
     {
         Vector2Int onColRow = new Vector2Int(0, 0);
         Vector2 xZPush = new Vector2(0.0f, 0.0f);
@@ -230,27 +201,14 @@ public class CubeCity : MonoBehaviour
             {
                 blocked.Add("South");
             }
-
-            /*
-            if (numCityBlocksXZ.x % 2 == 0)
-            {
-                //Debug.Log("even number of stop lights in row");
-                // then need to alternate starting
-                isEvenCheck += onColRow[1];
-            }
-            */
-
             if (onColRow[0] % 2 != 0)
             {
                 flipLightAxis[1] = true;
             }
-
             if (onColRow[1] % 2 != 0)
             {
                 flipLightAxis[0] = true;
             }
-
-
             bool isCorner = false;
             if (onColRow[0] == numCityBlocksXZ[0] - 1 || onColRow[0] == 0)
             {
@@ -260,13 +218,8 @@ public class CubeCity : MonoBehaviour
                     Debug.Log("found corner " + onColRow[0] + " " + onColRow[1]);
                 }
             }
-
-
-
             instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this, flipLightAxis, blocked, isCorner);
             streetLightControllers.Add(instanceSLC);
-
-
             // create StreetLight.cs adj list
             if (sLMatrix.Count <= onColRow[0])
             {
@@ -287,11 +240,10 @@ public class CubeCity : MonoBehaviour
         }
     }
 
-    private void SpawnCubeCity(Vector2Int sIndxAdjList)
+    void SpawnCubeCity(Vector2Int sIndxAdjList)
     {
         if (sIndxAdjList[1] < numCityBlocksXZ[1])
         {
-            //Debug.Log("looking to spawn city block at " + sIndxAdjList);
             // need to spawn cube city here? check the location to the right bottom
             Vector2Int botRightXZ = new Vector2Int(sIndxAdjList[0] + 1, sIndxAdjList[1] + 1);
 
@@ -308,25 +260,17 @@ public class CubeCity : MonoBehaviour
                     {
                         clockWisePath = !clockWisePath;
                     }
-                    //Debug.Log("found rect area to build block city starts at: " + sIndxAdjList);
+
                     // create city block's buildings - - - - - - - - - - -
                     GameObject instanceCityBlockGO = new GameObject("Parent City Block");
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
-
-                    //Debug.Log("instanceSetSize: " + instanceSetSize);
-
-
-
                     Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
-                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this);
-
+                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this, false);
                     allCityBlocks.Add(instanceCityBlockGO);
-                    //Debug.Log("instanceSetSize: " + instanceSetSize);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
                     Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
                     setInstancePos += new Vector3(cityBlockSizeXZ[0] / 2.0F, 0.0F, cityBlockSizeXZ[1] / -2.0F);
                     instanceCityBlockGO.transform.position = setInstancePos;
-
                     GameObject instanceRoad = new GameObject("straight road");
                     instanceRoad.transform.parent = instanceCityBlockGO.transform;
                     PathCreation.PathCreator newPath = instanceRoad.AddComponent<PathCreation.PathCreator>();
@@ -379,26 +323,16 @@ public class CubeCity : MonoBehaviour
                         GameObject instanceCar = Instantiate(car);
                         instanceCar.transform.parent = parentCars;
                         instanceCar.transform.name = "car " + carControllers.Count;
-
                         // car model
                         int instanceIndx = carControllers.Count;
                         CarModel instanceCarModel = new CarModel(instanceIndx, 6.0f);
-
-
                         instanceCar.transform.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
-
-
                         // car controller
                         CarController instanceCC = instanceCar.AddComponent<CarController>();
-                        // ?
                         instanceCC.pathControlled = false;
-
                         int rollSL = Random.Range(0, streetLights.Count);
                         Vector3 thisPos = new Vector3(streetLightControllers[rollSL].sLM.xPos, 0.05f, streetLightControllers[rollSL].sLM.zPos);
-                        //thisPos += new Vector3(2.0f, 0.0f, 0.0f);
                         instanceCar.transform.position = thisPos;
-
-
 
                         instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, streetLightControllers[rollSL].posPassAllowed[0].ToString());//enterFwyPos
                         carControllers.Add(instanceCC);
@@ -416,17 +350,16 @@ public class CubeCity : MonoBehaviour
             SpawnCubeCity(sIndxAdjList);
         }
     }
-    private IEnumerator AddHelicoptersSoon()
+    IEnumerator AddHelicoptersSoon()
     {
         yield return new WaitForEndOfFrame();
-        //yield return new WaitForSeconds(0.01F);
         if (superSkyScrapers.Count > 0)
         {
             AddHelicopters();
         }
     }
 
-    private void AddHelicopters()
+    void AddHelicopters()
     {
         for (int i = 0; i < superSkyScrapers.Count; i++)
         {
@@ -440,9 +373,6 @@ public class CubeCity : MonoBehaviour
                 path.gameObject.transform.name = "heli path";
                 path.transform.parent = parentHeliPaths;
                 instancePathPrefabs.Add(path);
-
-                // path detection (should not get too near any super sky scrapers or destroy the path)
-
                 GameObject pathDetection = new GameObject("Path Detection");
 
                 pathDetection.transform.parent = path.transform;
@@ -457,7 +387,7 @@ public class CubeCity : MonoBehaviour
         }
         StartCoroutine(SpawnHelicoptersSoon());
     }
-    private IEnumerator SpawnHelicoptersSoon()
+    IEnumerator SpawnHelicoptersSoon()
     {
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForEndOfFrame();
@@ -499,9 +429,8 @@ public class CubeCity : MonoBehaviour
 
             // heli controller
             HelicopterController instanceHC = instanceHeli.AddComponent<HelicopterController>();
-            HelicopterView instanceHelicopterView = instanceHeli.AddComponent<HelicopterView>();
 
-            instanceHC.SetUp(instanceHeliModel, instanceHelicopterView);
+            instanceHC.SetUp(instanceHeliModel);
             heliControllers.Add(instanceHC);
 
             tries++;
@@ -509,8 +438,6 @@ public class CubeCity : MonoBehaviour
     }
     public void SwitchViewPressed()
     {
-
-
         string instanceStr = "";
         camViewCurMax.x++;
         // skip heli view if no helis
@@ -541,9 +468,6 @@ public class CubeCity : MonoBehaviour
         }
         else if (camViewCurMax.x == 1)
         {
-
-
-
             int chooseHeli = Random.Range(0, parentHelis.childCount - 1);
             cameraTarget.parent = parentHelis.GetChild(chooseHeli);
             cameraTarget.localPosition = Vector3.zero;
@@ -555,13 +479,10 @@ public class CubeCity : MonoBehaviour
             camP.GetChild(0).localPosition = new Vector3(0.0F, cameraSettings[1].x, cameraSettings[1].y);
             camP.GetChild(0).localEulerAngles = new Vector3(cameraSettings[1].z, 0.0F, 0.0F);
 
-            // new
             cameraTarget.transform.eulerAngles = new Vector3(0.0f, -90.0f, -90.0f);
             cameraTarget.parent = null;
-
             cameraMovingTarget.transform.parent = parentHelis.GetChild(chooseHeli);
             cameraMovingTarget.transform.localPosition = Vector3.zero;
-
 
             int showRealNumHeli = chooseHeli + 1;
             instanceStr = "Heli (" + showRealNumHeli + ") View";
@@ -597,7 +518,7 @@ public class CubeCity : MonoBehaviour
 
         displayText.GetComponent<Text>().text = instanceStr;
     }
-    private bool startedRestart = false;
+    bool startedRestart = false;
     public void ReloadCity()
     {
         if (startedRestart == false)
@@ -615,23 +536,15 @@ public class CubeCity : MonoBehaviour
             yield return null;
         }
     }
-    private static string PadZeros(string str, int setChars)
-    {
-        while (str.Length < setChars)
-        {
-            str = "0" + str;
-        }
-        return str;
-    }
 
-    private void Update()
+    void Update()
     {
         for (int i = 0; i < carControllers.Count; i++)
         {
             carControllers[i].PossiblyMove();
         }
     }
-    private void LateUpdate()
+    void LateUpdate()
     {
         if (camViewCurMax.x == 1)
         {

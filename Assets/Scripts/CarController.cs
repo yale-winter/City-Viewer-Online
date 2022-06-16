@@ -1,9 +1,6 @@
 using UnityEngine;
-using PathCreation;
-using PathCreation.Examples;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 [Serializable]
 public class CarController : MonoBehaviour
@@ -19,7 +16,6 @@ public class CarController : MonoBehaviour
     public bool pathControlled = true;
     public float lSpeed = 1.0f;
     public string[] posPassS = new string[2];
-    bool leavingTown = false;
 
 
 
@@ -346,12 +342,10 @@ public class CarController : MonoBehaviour
     IEnumerator rotCR;
     void LerpRotFromTo(Vector3 rotPush)
     {
-
         if (rotCR != null)
         {
             StopCoroutine(rotCR);
         }
-        float dist = 1.0f;
         rotCR = LerpRotFromToCR(rotPush);
         StartCoroutine(rotCR);
     }
@@ -451,8 +445,6 @@ public class CarController : MonoBehaviour
     public void TrafficJam()
     {
         ChangeSpeed(0.0f);
-        //lSpeed = 0.0f;
-        //waitingIntersection = true;
         inFrontDet.SetActive(false);
         if (runCUB)
         {

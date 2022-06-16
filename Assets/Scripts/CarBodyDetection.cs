@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CarBodyDetection : MonoBehaviour
 {
-    private CubeCity cubeCity;
-    private void Awake()
+    CubeCity cubeCity;
+    void Awake()
     {
         cubeCity = GameObject.Find("CubeCity").GetComponent<CubeCity>();
     }
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("CarFrontDet"))
         {

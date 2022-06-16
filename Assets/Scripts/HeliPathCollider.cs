@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HeliPathCollider : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         //Debug.Log("destroing heli path too close to sky scraper");
         Destroy(transform.parent.parent.gameObject);

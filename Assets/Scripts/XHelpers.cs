@@ -35,7 +35,7 @@ public static class XHelpers
     }
     public static float heliFromLoadSettings(int i)
     {
-        return i / 100.0f*0.5f;
+        return i / 100.0f * 0.5f;
 
     }
     public static float scrapFromLoadSettings(int i)
@@ -43,5 +43,12 @@ public static class XHelpers
         return Mathf.Max(0.01f, i / 100.0f);
 
     }
-    
+    public static string PadZeros(string str, int setChars)
+    {
+        while (str.Length < setChars)
+        {
+            str = "0" + str;
+        }
+        return str;
     }
+}

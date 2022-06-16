@@ -9,9 +9,9 @@ public class GUI : MonoBehaviour
     public Transform layoutCityButs;
     public GameObject loadCityBut;
     public List<GameObject> loadCityButs = new List<GameObject>();
-    private CubeCity cubeCity;
-    private Scores scores;
-    private bool showingCreateMenu = false;
+    CubeCity cubeCity;
+    Scores scores;
+    bool showingCreateMenu = false;
     public GameObject createCityExpandBut;
     public GameObject createCityMenu;
     public GameObject pauseDarken;
@@ -20,7 +20,7 @@ public class GUI : MonoBehaviour
     public GameObject colorPickerP;
     public FlexibleColorPicker fcp;
     public Image customColorSwatch;
-    private float nudgeAmount = 0.1F;
+    float nudgeAmount = 0.1F;
     /// <summary>
     /// slider 0 = size, 1 = helis, 2 = scrapers
     /// </summary>
@@ -33,7 +33,7 @@ public class GUI : MonoBehaviour
     public List<string> namesMid = new List<string>();
     public List<string> namesSuf = new List<string>();
 
-    private Scoreboard scoreboard;
+    Scoreboard scoreboard;
 
     public Text curCityNameExtra;
     public Text aboveCityText;
@@ -62,10 +62,6 @@ public class GUI : MonoBehaviour
         pauseDarken.SetActive(false);
         Time.timeScale = 1.0F;
     }
-
-
-
-
     void CreateLoadButtons()
     {
         for (int i = 0; i < loadCityButs.Count; i++)
@@ -75,9 +71,7 @@ public class GUI : MonoBehaviour
                 Destroy(loadCityButs[i]);
             }
         }
-
         loadCityButs.Clear();
-
         for (int i = 0; i < 8; i++)
         {
             GameObject newBut = Instantiate(loadCityBut);
@@ -106,11 +100,8 @@ public class GUI : MonoBehaviour
             Time.timeScale = 0.0f;
             pauseDarken.SetActive(true);
             Color32 randColor = new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255);
-
             customColorSwatch.color = randColor;
             fcp.color = randColor;
-
-
             for (int i = 0; i < sliders.Count; i++)
             {
                 float roll = Random.Range(0.0f, 1.0f);
@@ -137,8 +128,6 @@ public class GUI : MonoBehaviour
         }
         // adjust for index number
         thisSlider--;
-
-
         if (thisSlider == 0)
         {
             if (positive)
@@ -152,7 +141,6 @@ public class GUI : MonoBehaviour
         }
         else
         {
-
             if (positive)
             {
                 sliders[thisSlider].value += nudgeAmount;
@@ -162,7 +150,6 @@ public class GUI : MonoBehaviour
                 sliders[thisSlider].value -= nudgeAmount;
             }
         }
-
         sliders[thisSlider].value = Mathf.Clamp(sliders[thisSlider].value, 0.0f, 1.0f);
     }
     public void SelectColorPressed()
@@ -183,7 +170,6 @@ public class GUI : MonoBehaviour
         string newStr = namesPre[roll] + namesMid[roll2] + namesSuf[roll3];
         Debug.Log("newStr " + newStr);
         inputFieldName.text = newStr;
-
     }
 
     public void SaveAndCreateNewCity()
@@ -203,7 +189,7 @@ public class GUI : MonoBehaviour
         Debug.Log("colorInt " + colorInt);
         scoreboard.SubmitCity(inputFieldName.text, (int)(sliders[0].value * 100.0f), (int)(sliders[1].value * 100.0f), (int)(sliders[2].value * 100.0f), colorInt);
     }
-    private static string PadZeros(string str, int setChars)
+    static string PadZeros(string str, int setChars)
     {
         while (str.Length < setChars)
         {
@@ -211,24 +197,18 @@ public class GUI : MonoBehaviour
         }
         return str;
     }
-    private void Update()
+    void Update()
     {
         if (showingCreateMenu)
         {
-
             if (Input.GetMouseButtonUp(0))
             {
                 sliders[0].value = Mathf.RoundToInt(sliders[0].value * 2.0f) / 2.0f;
 
             }
-
-
             advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString();
             advText[1].text = XHelpers.heliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
             advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString();
-
-
-
         }
     }
 

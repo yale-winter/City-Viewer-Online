@@ -12,15 +12,13 @@ public class StreetLightController : MonoBehaviour
     public Allow[] posPassAllowed = new Allow[2];
     public Allow[] enterFromAllowed = new Allow[2];
     [Tooltip("delay to switch the lights")]
-    private Vector2 delayMinMax = new Vector2(4.0F, 10.0F);
-    private float yellowLightDelay = 2.0F;
-    private Color[] sLColors = new Color[4];
+    Vector2 delayMinMax = new Vector2(4.0F, 10.0F);
+    float yellowLightDelay = 2.0F;
+    Color[] sLColors = new Color[4];
     public Material bulbMat;
-    private CubeCity cubeCity;
-    private float timeOfLastSwitch = float.PositiveInfinity;
-    private float waitingDur = 0.0F;
-    private int carsWaitingHere = 0;
-    private int flipAxis = 0;
+    CubeCity cubeCity;
+    float timeOfLastSwitch = float.PositiveInfinity;
+    float waitingDur = 0.0F;
     string[] posPassAllowedS = new string[2];
     public List<string> blocked = new List<string>();
 
@@ -186,19 +184,18 @@ public class StreetLightController : MonoBehaviour
             }
 
             allowPassage = setA;
-            carsWaitingHere = 0;
             float setWait = UnityEngine.Random.Range(delayMinMax.x, delayMinMax.y);
             waitingDur = setWait;
             timeOfLastSwitch = Time.time;
             StartCoroutine(WaitToSwitchLightsAgain(setWait));
         }
     }
-    private IEnumerator WaitToSwitchLightsAgain(float thisWait)
+    IEnumerator WaitToSwitchLightsAgain(float thisWait)
     {
         yield return new WaitForSeconds(thisWait);
         StartCoroutine("SwitchLights");
     }
-    private void SetLightBulbColor(Allow allowAxis, int setBulb, int setColor)
+    void SetLightBulbColor(Allow allowAxis, int setBulb, int setColor)
     {
         Material instanceMat = new Material(bulbMat);
         instanceMat.color = sLColors[setColor];
@@ -221,6 +218,5 @@ public class StreetLightController : MonoBehaviour
             float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay;
             cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z));
         }
-        carsWaitingHere++;
     }
 }

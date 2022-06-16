@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class BuildingPlacementDet : MonoBehaviour
 {
-    private float startTime = float.PositiveInfinity;
-    private void OnTriggerEnter(Collider other)
+    float startTime = float.PositiveInfinity;
+    void OnTriggerEnter(Collider other)
     {
         if (other.transform.name.Substring(0,5) == "Super")
         {
             Destroy(gameObject);
         }
     }
-    private void Start()
+    void Start()
     {
         startTime = Time.time;
     }
-    private void Update()
+    void Update()
     {
         if (Time.time - 1.0F > startTime)
         {

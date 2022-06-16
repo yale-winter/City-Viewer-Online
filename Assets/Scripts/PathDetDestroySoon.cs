@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PathDetDestroySoon : MonoBehaviour
 {
-    private float startTime = Mathf.Infinity;
+    float startTime = Mathf.Infinity;
     void Start()
     {
         startTime = Time.time;
