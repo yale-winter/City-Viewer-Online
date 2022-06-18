@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 
 public class ScoreboardWebInterface : MonoBehaviour
 {
+    // todo: update to unity web request
+
     // psuedo-public password below: another hidden password is used on private website accessed only from the same site
     string secretKey = "Gosh@_23872"; // Edit this value and make sure it's the same as the one stored on the server
     public string addScoreURL = "https://yalewinter.com/cityviewer/savecity.php?"; //be sure to add a ? to your url
