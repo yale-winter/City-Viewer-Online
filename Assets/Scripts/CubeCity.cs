@@ -137,7 +137,7 @@ public class CubeCity : MonoBehaviour
             helicoptersAvgPerBlock = XHelpers.heliFromLoadSettings(data.helicopters[loadIndex]);
             superSkyScrapersAvgPerBlock = XHelpers.scrapFromLoadSettings(data.scrapers[loadIndex]);
             string loadColorStr = XHelpers.PadZeros(data.cityColor[loadIndex].ToString(), 9);
-            Debug.Log("loadColorStr : " + loadColorStr);
+            //Debug.Log("loadColorStr : " + loadColorStr);
             mat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
             // end import data
 
@@ -215,7 +215,6 @@ public class CubeCity : MonoBehaviour
                 if (onColRow[1] == numCityBlocksXZ[1] - 1 || onColRow[1] == 0)
                 {
                     isCorner = true;
-                    Debug.Log("found corner " + onColRow[0] + " " + onColRow[1]);
                 }
             }
             instanceSLC.SetUp(instanceIC, instanceSSLV, instanceSLM, sLColors, bulbMat, this, flipLightAxis, blocked, isCorner);
@@ -260,7 +259,6 @@ public class CubeCity : MonoBehaviour
                     {
                         clockWisePath = !clockWisePath;
                     }
-
                     // create city block's buildings - - - - - - - - - - -
                     GameObject instanceCityBlockGO = new GameObject("Parent City Block");
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
@@ -424,7 +422,6 @@ public class CubeCity : MonoBehaviour
             instancePF.speed = instanceHeliModel.speed;
             instancePF.type = "helicopter";
             int pickPathInstance = Random.Range(0, parentHeliPaths.childCount);
-            // Debug.Log("pick path instance: " + pickPathInstance);
             instancePF.pathCreator = parentHeliPaths.GetChild(pickPathInstance).GetComponent<PathCreator>();
 
             // heli controller

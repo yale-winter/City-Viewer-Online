@@ -20,7 +20,6 @@ public static class XHelpers
     public static Vector2Int sizeFromLoadSettings(int i)
     {
         float sizeMult = i / 100.0f;
-        Debug.Log("data " + i + " size mult " + sizeMult);
         Vector2Int size = new Vector2Int((int)Mathf.Round(4.0f + 4.0f * sizeMult), (int)Mathf.Round(4.0f + 4.0f * sizeMult));
         if (size.x % 2 != 0)
         {
@@ -30,7 +29,6 @@ public static class XHelpers
         {
             size.y--;
         }
-        Debug.Log("return " + size.x + " , " + size.y);
         return size;
     }
     public static float heliFromLoadSettings(int i)

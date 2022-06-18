@@ -16,7 +16,8 @@ public class Scoreboard : MonoBehaviour
     private void Awake()
     {
         gUI = transform.GetComponent<GUI>();
-        scoreboardWebInterface = new ScoreboardWebInterface();
+        GameObject theScores = new GameObject();
+        scoreboardWebInterface = theScores.AddComponent<ScoreboardWebInterface>();
         highScoreLocation = scoreboardWebInterface.highscoreURL;
     }
     private IEnumerator LoadScores()

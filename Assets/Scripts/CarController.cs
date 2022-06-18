@@ -88,10 +88,12 @@ public class CarController : MonoBehaviour
                     }
 
                 }
+                /*
                 if (iD == 0)
                 {
                     Debug.Log("approach intersection (" + intersectionID + ") car (" + iD + ") carDir " + carDir + " travelOK " + travelOK + " intersec id " + intersectionID + " inter pos " + interPos + " posPassS[0] " + posPassS[0] + " posPassS[1] " + posPassS[1]);
                 }
+                */
                 bool mustWait = true;
                 if (travelOK == carDir)
                 {
@@ -107,10 +109,7 @@ public class CarController : MonoBehaviour
 
 
 
-                //possibleWait = 0.0f;
                 StartCoroutine(CrossIntersection(possibleWait, interPos));
-                //}
-                // Debug.Log("car approaching intersection: " + carDir + " travelOK " + travelOK);
             }
         }
     }
