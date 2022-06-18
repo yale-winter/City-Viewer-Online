@@ -16,7 +16,7 @@ Procedurally generate a city with skyscrapers, roads, cars, stoplights, and heli
 - Stoplights that change and animate the way they should with their different red yellow and green bulbs, and relay that info to the cars
 - Helicopters that follows windy paths, circle big buildings, and don't crash into buildings
 - Settings to modify the procedural generation of Cube City for different sizes and styles
-- 5.14.22 Save to and load from cities saved online on a database at yalewinter.com with SQL, PHP, HTTP requests.
+- 5.14.22 Save to and load from cities saved online on a database on my website with SQL, PHP, HTTP requests.
 
 ## Implementation
 ![Cube City diagram](https://user-images.githubusercontent.com/5803874/156256669-fc3db5f4-8708-4918-bf10-ecfbf9ab4b22.jpg)
