@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[Serializable]
+
 public class StreetLightController : MonoBehaviour
 {
-    public IntersectionCollider iC;
-    public SignStopLightView sSLV;
+    IntersectionCollider iC;
+    SignStopLightView sSLV;
     public StreetLightModel sLM;
     public Allow allowPassage = Allow.None;
     public Allow[] posPassAllowed = new Allow[2];
     public Allow[] enterFromAllowed = new Allow[2];
-    [Tooltip("delay to switch the lights")]
+    /// <summary>
+    /// delay to switch lights min and max
+    /// </summary>
     Vector2 delayMinMax = new Vector2(4.0F, 10.0F);
     float yellowLightDelay = 2.0F;
     Color[] sLColors = new Color[4];
@@ -216,7 +218,7 @@ public class StreetLightController : MonoBehaviour
             int carID = int.Parse(carName.Substring(4));
             //float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay + carsWaitingHere * 1.2f;
             float possibleWaitDur = waitingDur - (Time.time - timeOfLastSwitch) + yellowLightDelay;
-            cubeCity.carControllers[carID].ApproachIntersection(sLM.iD, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z));
+            cubeCity.carControllers[carID].ApproachIntersection(sLM.ID, travelOK, possibleWaitDur, posPassAllowedS, new Vector3(transform.position.x, 0.05f, transform.position.z));
         }
     }
 }

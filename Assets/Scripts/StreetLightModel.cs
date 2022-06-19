@@ -1,11 +1,12 @@
-using System.Numerics;
 using System;
-[Serializable]
 public class StreetLightModel
 {
-    public int iD = -1;
-    public float xPos = -1;
-    public float zPos = -1;
+    public int ID => iD;
+    int iD = -1;
+    public float XPos => xPos;
+    float xPos = -1;
+    public float ZPos => zPos;
+    float zPos = -1;
     public StreetLightModel(int setIndex, float posX, float posY)
     {
         iD = setIndex;

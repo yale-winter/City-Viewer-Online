@@ -1,14 +1,11 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine.Networking;
 
 public class ScoreboardWebInterface : MonoBehaviour
 {
-    // todo: update to unity web request
-
     // psuedo-public password below: another hidden password is used on private website accessed only from the same site
     string secretKey = "Gosh@_23872"; // Edit this value and make sure it's the same as the one stored on the server
     public string addScoreURL = "https://yalewinter.com/cityviewer/savecity.php?"; //be sure to add a ? to your url
@@ -19,33 +16,44 @@ public class ScoreboardWebInterface : MonoBehaviour
     Scores scores;
     public Scores Scores => scores;
 
-    // Send the new score to the database
+    /// <summary>
+    /// This connects to a server side php script that will add the name and score to a MySQL DB
+    /// Supply it with a string representing the players name and the players score.
+    /// can also hash and unhash info to confirm match (not used here)
+    /// </summary>
     public IEnumerator PostScores(string name, int score, int citySize, int helicopters, int scrapers, int cityColor)
     {
-        //This connects to a server side php script that will add the name and score to a MySQL DB.
-        // Supply it with a string representing the players name and the players score.
-        string hash = name + score + citySize + helicopters + scrapers + cityColor + secretKey;//Utility.Md5Sum(name + score + secretKey);
-        string post_url = addScoreURL + "name=" + WWW.EscapeURL(name) + "&score=" + score + "&citySize=" + citySize + "&helicopters=" + helicopters + "&scrapers=" + scrapers + "&cityColor=" + cityColor + "&hash=" + hash;
+
+        string hash = name + score + citySize + helicopters + scrapers + cityColor + secretKey;
+        string post_url = addScoreURL + "name=" + UnityWebRequest.EscapeURL(name) + "&score=" + score + "&citySize=" + citySize + "&helicopters=" + helicopters + "&scrapers=" + scrapers + "&cityColor=" + cityColor + "&hash=" + hash;
         // Post the URL to the site and create a download object to get the result.
         Debug.Log("Submitting score");
-        WWW hs_post = new WWW(post_url);
-        yield return hs_post; // Wait until the download is done
-        Debug.Log("Score submitted");
-        Debug.Log("post_url: " + post_url);
-        if (hs_post.error != null)
+        WWWForm form = new WWWForm();
+        form.AddField("myField", "myData");
+
+        using (UnityWebRequest www = UnityWebRequest.Post(post_url, form))
         {
-            Debug.Log("There was an error posting the high score: " + hs_post.error);
-        }
-        else
-        {
-            GameObject.Find("CubeCity").GetComponent<CubeCity>().ReloadCity();
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+                GameObject.Find("CubeCity").GetComponent<CubeCity>().ReloadCity();
+
+            }
         }
     }
-
-    // Get the scores from the database
+    /// <summary>
+    /// Get 8 most recently saved cities information online 
+    /// (external PHP / SQL)
+    /// </summary>
     public IEnumerator GetScores(Action<int> returnCode)
     {
-        Debug.Log("running get scores");
+        Debug.Log("loading Cities");
         using (UnityWebRequest hs_get = UnityWebRequest.Get(highscoreURL))
         {
             yield return hs_get.SendWebRequest();

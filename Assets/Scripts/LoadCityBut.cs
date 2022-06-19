@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadCityBut : MonoBehaviour
 {
-    private int iD = -1;
+    int iD = -1;
     
     public void SetID(int i) {
         iD = i;
@@ -20,7 +19,7 @@ public class LoadCityBut : MonoBehaviour
     }
     public void ButtonPressed()
     {
-        Debug.Log("button pressed id: " + iD);
+        //Debug.Log("button pressed id: " + iD);
         // set persistant save ibjc info
         GameObject.Find("Persist").GetComponent<Persist>().forceLoad = iD;
         GameObject.Find("CubeCity").GetComponent<CubeCity>().ReloadCity();

@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class CubeCity : MonoBehaviour
 {
-
-
     public List<GameObject> allCityBlocks = new List<GameObject>();
 
     /// <summary>
@@ -49,8 +47,7 @@ public class CubeCity : MonoBehaviour
     Transform parentCars;
     Transform parentHeliPaths;
     Transform parentCarPaths;
-
-    float stopLightDetectionSize = 2.0f;//1.25f;
+    float stopLightDetectionSize = 2.0f;
 
     /// <summary>
     /// adjancency matrix of street lights / intersections
@@ -266,7 +263,7 @@ public class CubeCity : MonoBehaviour
                     instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this, false);
                     allCityBlocks.Add(instanceCityBlockGO);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
-                    Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
+                    Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.XPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.ZPos);
                     setInstancePos += new Vector3(cityBlockSizeXZ[0] / 2.0F, 0.0F, cityBlockSizeXZ[1] / -2.0F);
                     instanceCityBlockGO.transform.position = setInstancePos;
                     GameObject instanceRoad = new GameObject("straight road");
@@ -291,7 +288,7 @@ public class CubeCity : MonoBehaviour
                     pathPoints.Add(Vector3.zero);
                     for (int i = 0; i < pathPoints.Count; i++)
                     {
-                        Vector3 instancePivotCenter = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.xPos, 0.02F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.zPos);
+                        Vector3 instancePivotCenter = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.XPos, 0.02F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.ZPos);
                         pathPoints[i] += instancePivotCenter;
                     }
                     BezierPath newBPath = new BezierPath(pathPoints);
@@ -329,10 +326,9 @@ public class CubeCity : MonoBehaviour
                         CarController instanceCC = instanceCar.AddComponent<CarController>();
                         instanceCC.pathControlled = false;
                         int rollSL = Random.Range(0, streetLights.Count);
-                        Vector3 thisPos = new Vector3(streetLightControllers[rollSL].sLM.xPos, 0.05f, streetLightControllers[rollSL].sLM.zPos);
+                        Vector3 thisPos = new Vector3(streetLightControllers[rollSL].sLM.XPos, 0.05f, streetLightControllers[rollSL].sLM.ZPos);
                         instanceCar.transform.position = thisPos;
-
-                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, streetLightControllers[rollSL].posPassAllowed[0].ToString());//enterFwyPos
+                        instanceCC.SetUp(instanceIndx, instanceCar, instanceCarModel, streetLightControllers[rollSL].posPassAllowed[0].ToString());
                         carControllers.Add(instanceCC);
                         carsTotal++;
                     }
@@ -419,7 +415,7 @@ public class CubeCity : MonoBehaviour
             HelicopterModel instanceHeliModel = new HelicopterModel(instanceIndx, Random.Range(2.5f, 4.5f));
 
             PathFollower instancePF = instanceHeli.AddComponent<PathFollower>();
-            instancePF.speed = instanceHeliModel.speed;
+            instancePF.speed = instanceHeliModel.Speed;
             instancePF.type = "helicopter";
             int pickPathInstance = Random.Range(0, parentHeliPaths.childCount);
             instancePF.pathCreator = parentHeliPaths.GetChild(pickPathInstance).GetComponent<PathCreator>();
