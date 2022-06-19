@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-[Serializable]
 public class CarController : MonoBehaviour
 {
 
@@ -35,9 +34,7 @@ public class CarController : MonoBehaviour
     float spawnTime = 0.0f;
     public void SetUp(int setID, GameObject setCar, CarModel setModel, string instantDirection)
     {
-
         spawnTime = Time.time;
-
         normalCarQ.eulerAngles = new Vector3(0.0f, 90.0f, -90.0f);
 
         iD = setID;
@@ -48,7 +45,7 @@ public class CarController : MonoBehaviour
         carFrontCol.SetUp(this);
         inFrontDet = carFrontCol.gameObject;
 
-        lSpeed = carModel.speed;
+        lSpeed = carModel.Speed;
 
         InstantDirection(instantDirection);
 
@@ -88,27 +85,15 @@ public class CarController : MonoBehaviour
                     }
 
                 }
-                /*
-                if (iD == 0)
-                {
-                    Debug.Log("approach intersection (" + intersectionID + ") car (" + iD + ") carDir " + carDir + " travelOK " + travelOK + " intersec id " + intersectionID + " inter pos " + interPos + " posPassS[0] " + posPassS[0] + " posPassS[1] " + posPassS[1]);
-                }
-                */
                 bool mustWait = true;
                 if (travelOK == carDir)
                 {
-
                     mustWait = false;
-
                 }
-
                 if (!mustWait)
                 {
                     possibleWait = 0.0f;
                 }
-
-
-
                 StartCoroutine(CrossIntersection(possibleWait, interPos));
             }
         }
@@ -143,7 +128,7 @@ public class CarController : MonoBehaviour
         yield return new WaitForSeconds(waitTime * 0.5f);
         waitingIntersection = false;
         crossingIntersection = true;
-        ChangeSpeed(carModel.speed);
+        ChangeSpeed(carModel.Speed);
 
         int rollForDir = UnityEngine.Random.Range(0, 2);
         // decide direction (opposite of passage dir)
@@ -182,8 +167,8 @@ public class CarController : MonoBehaviour
             LerpMoveFromTo(car.transform.position, XHelpers.midIntersectionPos(setDir, interPos));
           
             
-            ChangeSpeed(carModel.speed/ 4.0f);
-            yield return new WaitForSeconds(4.25f / carModel.speed);
+            ChangeSpeed(carModel.Speed/ 4.0f);
+            yield return new WaitForSeconds(4.25f / carModel.Speed);
             if (turnLeft)
             {
                 LerpRotFromTo(new Vector3(90.0f, 0.0f, 0.0f));
@@ -198,17 +183,12 @@ public class CarController : MonoBehaviour
                 yield return 0;
             }
 
-            //yield return new WaitForSeconds(3.5f / carModel.speed);
-
-
-
             moveDir[0] = setDir[0];
             moveDir[1] = setDir[1];
 
+            yield return new WaitForSeconds(3.0f / carModel.Speed);
 
-            yield return new WaitForSeconds(3.0f / carModel.speed);
-
-            ChangeSpeed(carModel.speed);
+            ChangeSpeed(carModel.Speed);
 
             LerpMoveFromTo(car.transform.position, XHelpers.exitIntersectionPos(setDir, interPos));
 
@@ -226,14 +206,8 @@ public class CarController : MonoBehaviour
             }
 
         }
-        //yield return new WaitForSeconds(1.0f / carModel.speed);
-
-        //yield return new WaitForSeconds(2.0f / carModel.speed);
-        //car.transform.Find("CarBody1").gameObject.SetActive(true);
-
         crossingIntersection = false;
         inFrontDet.SetActive(true);
-
     }
 
     private IEnumerator SlowDown(float waitAfter)
@@ -275,8 +249,7 @@ public class CarController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         inFrontDet.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        ChangeSpeed(carModel.speed);
-        //waitingIntersection = false;
+        ChangeSpeed(carModel.Speed);
         runCUB = false;
 
     }
@@ -285,7 +258,6 @@ public class CarController : MonoBehaviour
 
     private void ChangeSpeed(float targetSpeed)
     {
-        //Debug.Log("changing car(" + carModel.iD + ") speed to: " + targetSpeed + " max speed is: " + carModel.speed);
         if (changeSpeedCRRunning)
         {
             StopCoroutine(changeSpeedCR);
@@ -297,7 +269,6 @@ public class CarController : MonoBehaviour
     private float speedInc = 2.0f;
     private IEnumerator ChangeSpeedIE(float targetSpeed)
     {
-        // Debug.Log("change speed to: " + targetSpeed);
         changeSpeedCRRunning = true;
         bool updated = true;
         float newSpeed = lSpeed;
@@ -311,21 +282,16 @@ public class CarController : MonoBehaviour
             }
             else if (newSpeed > targetSpeed + speedThresh)
             {
-                newSpeed -= speedInc * Time.deltaTime * 10.0f;//2.0f;
+                newSpeed -= speedInc * Time.deltaTime * 10.0f;
                 updated = true;
             }
-            newSpeed = Mathf.Clamp(newSpeed, 0.0f, carModel.speed);
+            newSpeed = Mathf.Clamp(newSpeed, 0.0f, carModel.Speed);
             lSpeed = newSpeed;
             yield return 0;
         }
         lSpeed = targetSpeed;
         changeSpeedCRRunning = false;
     }
-    Vector3 exitStartPos;
-    Quaternion exitStartQ;
-
-
-
     IEnumerator moveCR;
     void LerpMoveFromTo(Vector3 from, Vector3 to)
     {
@@ -357,7 +323,7 @@ public class CarController : MonoBehaviour
         float damp = 0.1f;
         while (p < 1.0f)
         {
-            float incrPush = Time.deltaTime * carModel.speed * damp * 1.8f * (lSpeed / carModel.speed);
+            float incrPush = Time.deltaTime * carModel.Speed * damp * 1.8f * (lSpeed / carModel.Speed);
             if (p < 0.3f)
             {
                 damp += Time.deltaTime;
@@ -389,11 +355,11 @@ public class CarController : MonoBehaviour
     private IEnumerator LerpMoveFromToCR(float dist, Vector3 from, Vector3 to)
     {
         lerpingPos = true;
-        float dur = 1.0f / (dist / carModel.speed);
+        float dur = 1.0f / (dist / carModel.Speed);
         float p = 0.0f;
         while (p < 1.0f)
         {
-            p += Time.deltaTime * dur * (lSpeed / carModel.speed);
+            p += Time.deltaTime * dur * (lSpeed / carModel.Speed);
             if (p > 1.0f)
             {
                 p = 1.0f;
@@ -411,8 +377,6 @@ public class CarController : MonoBehaviour
             car.transform.position = new Vector3(car.transform.position.x + lSpeed * Time.deltaTime * moveDir[0], car.transform.position.y, car.transform.position.z + lSpeed * Time.deltaTime * moveDir[1]);
         }
     }
-
-
     public void InstantDirection(string dir)
     {
         car.transform.localRotation = normalCarQ;
@@ -430,7 +394,6 @@ public class CarController : MonoBehaviour
         }
         else if (dir == "East")
         {
-
             moveDir[0] = 1.0f;
             moveDir[1] = 0.0f;
         }
