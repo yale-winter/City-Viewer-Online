@@ -1,5 +1,5 @@
 # City-Viewer-Online
-WebGL, C#, SQL, PHP, Database, Unity
+WebGL, C#, SQL, PHP, Database, HTTP, Unity
 
 View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityviewer/ "City Viewer Online") (WebGL Browser from desktop)
 
@@ -14,7 +14,7 @@ Procedurally generate a city with skyscrapers, roads, cars, stoplights, and heli
 - Stoplights are placed at the intersections
 - Cars that drive around on the one-way roads, stop at red stoplights, and go on green
 - Stoplights that change and animate the way they should with their different red yellow and green bulbs, and relay that info to the cars
-- Helicopters that follows windy paths, circle big buildings, and don't crash into buildings
+- Helicopters that fly around, don't crash into buildings
 - Settings to modify the procedural generation of Cube City for different sizes and styles
 - 5.14.22 Save to and load from cities saved online on a database on my website with SQL, PHP, HTTP requests.
 
@@ -25,8 +25,8 @@ Procedurally generate a city with skyscrapers, roads, cars, stoplights, and heli
 - Most of the main elements call for and use the Model View Controller pattern (with the Models not using UnityEngine)
 - Some command pattern, observer pattern, and recursive code is used
 - Just one object with one script: CubeCity.cs needed in the scene
-- The Developer can dynamically set city attributes such as the size of city blocks in X, Z, average number of Helicopters per block, etc
+- The Player can dynamically set city attributes such as the size of city blocks in X, Z, average number of Helicopters per block, etc
 - Helicopter paths are discarded if they fly through buildings
-- Uses and adapts from Bezier Path Creator free Asset Store Package for the paths
+- Uses and adapts from Bezier Path Creator free Asset Store Package for the Helicopter paths
 - Cars stop at stoplights with waiting coroutines getting delay info from stoplight, no OnUpdate functions 
-- Switch between 3 different camera views to see the city, follow helicopters, or follow cars
+- Switch between the different camera views to see the city, follow helicopters, or follow cars
