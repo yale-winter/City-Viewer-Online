@@ -128,19 +128,21 @@ public class GUI : MonoBehaviour
         }
         // adjust for index number
         thisSlider--;
+        
         if (thisSlider == 0)
         {
             if (positive)
             {
-                sliders[thisSlider].value += 0.5f;
+                sliders[thisSlider].value += 1.0f/5.0f;
             }
             else
             {
-                sliders[thisSlider].value -= 0.5f;
+                sliders[thisSlider].value -= 1.0f/5.0f;
             }
         }
         else
         {
+            
             if (positive)
             {
                 sliders[thisSlider].value += nudgeAmount;
@@ -203,11 +205,11 @@ public class GUI : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(0))
             {
-                sliders[0].value = Mathf.RoundToInt(sliders[0].value * 2.0f) / 2.0f;
+               sliders[0].value = Mathf.RoundToInt(sliders[0].value * 5.0f) / 5.0f;
 
             }
-            advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString();
-            advText[1].text = XHelpers.heliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
+            advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString() + " blocks";
+            advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString() + " helis";
             advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString();
         }
     }

@@ -38,7 +38,6 @@ public class CubeCity : MonoBehaviour
     float roadBuffer = 2.0f;
     public Material roadMat;
 
-    // objects of cube city
     public Transform cameraTarget;
     public Transform camP;
     Vector2Int camViewCurMax = new Vector2Int(0, 3);
@@ -52,22 +51,19 @@ public class CubeCity : MonoBehaviour
     /// <summary>
     /// adjancency matrix of street lights / intersections
     /// </summary>
-    [SerializeField]
     List<inCol> sLMatrix = new List<inCol>();
     public List<GameObject> streetLights = new List<GameObject>();
-    [SerializeField]
     List<StreetLightController> streetLightControllers = new List<StreetLightController>();
     public GameObject signStopLight;
     // cars
     public GameObject car;
-    [SerializeField]
+    int carsMax = 12;
     public List<CarController> carControllers = new List<CarController>();
     public List<GameObject> superSkyScrapers = new List<GameObject>();
 
     // helicopters
     Transform parentHelis;
     public GameObject heli;
-    [SerializeField]
     public List<HelicopterController> heliControllers = new List<HelicopterController>();
     public GameObject[] heliPaths = new GameObject[3];
 
@@ -80,10 +76,10 @@ public class CubeCity : MonoBehaviour
     Vector3 viewPos2;
 
     public GameObject cityBuilding;
-
     int carsTotal = 0;
-
     GameObject cameraMovingTarget;
+
+    int maxHelis = 10;
 
 
     void Awake()
@@ -106,7 +102,6 @@ public class CubeCity : MonoBehaviour
         {
             loadIndex = 0;
         }
-
         parentCubeCity = new GameObject("Parent Cube City").transform;
         parentCubeCity.parent = transform;
         parentCars = new GameObject("Parent Cars").transform;
@@ -128,21 +123,18 @@ public class CubeCity : MonoBehaviour
     {
         if (loadOnline)
         {
-            // import data from most recent save
             numCityBlocksXZ = XHelpers.sizeFromLoadSettings(data.citySize[loadIndex]);
-            Debug.Log("loaded num city blocks: " + numCityBlocksXZ.x + " , " + numCityBlocksXZ.y);
             helicoptersAvgPerBlock = XHelpers.heliFromLoadSettings(data.helicopters[loadIndex]);
+            maxHelis = Mathf.RoundToInt(XHelpers.maxHeliFromLoadSettings(data.helicopters[loadIndex]));
             superSkyScrapersAvgPerBlock = XHelpers.scrapFromLoadSettings(data.scrapers[loadIndex]);
             string loadColorStr = XHelpers.PadZeros(data.cityColor[loadIndex].ToString(), 9);
-            //Debug.Log("loadColorStr : " + loadColorStr);
             mat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
-            // end import data
-
         }
 
-        viewPos1 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.5F, 30.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
-        viewPos2 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.7F, 25.0F, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
+        viewPos1 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.5f + cityBlockSizeXZ.x * 0.5f, 21.0f, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
+        viewPos2 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.65f, 21.0f, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.85f);
         cameraTarget.position = viewPos1;
+
         camP.position = cameraTarget.position;
         SpawnStopLights();
         SpawnCubeCity(new Vector2Int(0, 0));
@@ -240,7 +232,7 @@ public class CubeCity : MonoBehaviour
     {
         if (sIndxAdjList[1] < numCityBlocksXZ[1])
         {
-            // need to spawn cube city here? check the location to the right bottom
+            // check the location right bottom
             Vector2Int botRightXZ = new Vector2Int(sIndxAdjList[0] + 1, sIndxAdjList[1] + 1);
 
             if (botRightXZ[0] < sLMatrix.Count)
@@ -256,7 +248,7 @@ public class CubeCity : MonoBehaviour
                     {
                         clockWisePath = !clockWisePath;
                     }
-                    // create city block's buildings - - - - - - - - - - -
+                    // create city block's buildings
                     GameObject instanceCityBlockGO = new GameObject("Parent City Block");
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
                     Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
@@ -306,7 +298,7 @@ public class CubeCity : MonoBehaviour
                     // end car path stuff
                     int createThisManyCarsBlock = Random.Range(0, 2);
 
-                    if (carsTotal >= 12)
+                    if (carsTotal >= carsMax)
                     {
                         createThisManyCarsBlock = 0;
                     }
@@ -392,11 +384,7 @@ public class CubeCity : MonoBehaviour
     }
     public void SpawnHelicopters()
     {
-        int maxHelis = Mathf.RoundToInt(helicoptersAvgPerBlock * numCityBlocksXZ.x * numCityBlocksXZ.y);
-        if (maxHelis > 200)
-        {
-            maxHelis = 200;
-        }
+        
         int tries = 0;
 
         List<Vector3> pathPoints = new List<Vector3>();
@@ -429,16 +417,19 @@ public class CubeCity : MonoBehaviour
             tries++;
         }
     }
+    /// <summary>
+    /// switch the camera view between the different modes
+    /// </summary>
     public void SwitchViewPressed()
     {
         string instanceStr = "";
         camViewCurMax.x++;
-        // skip heli view if no helis
+        // skip heli view if none
         if (camViewCurMax.x == 1 && parentHelis.childCount == 0)
         {
             camViewCurMax.x++;
         }
-        // skip car view if no cars
+        // skip car view if none
         if (camViewCurMax.x == 2 && parentCars.childCount == 0)
         {
             camViewCurMax.x++;
@@ -523,7 +514,6 @@ public class CubeCity : MonoBehaviour
     public IEnumerator ReloadCityIE()
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Load");
-        // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
             yield return null;

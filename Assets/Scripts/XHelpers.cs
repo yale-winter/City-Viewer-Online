@@ -20,7 +20,7 @@ public static class XHelpers
     public static Vector2Int sizeFromLoadSettings(int i)
     {
         float sizeMult = i / 100.0f;
-        Vector2Int size = new Vector2Int((int)Mathf.Round(4.0f + 4.0f * sizeMult), (int)Mathf.Round(4.0f + 4.0f * sizeMult));
+        Vector2Int size = new Vector2Int((int)Mathf.Round(4.0f + 4.0f * sizeMult), (int)Mathf.Round(4.0f + 8.0f * sizeMult));
         if (size.x % 2 != 0)
         {
             size.x--;
@@ -34,6 +34,13 @@ public static class XHelpers
     public static float heliFromLoadSettings(int i)
     {
         return i / 100.0f * 0.5f;
+
+    }
+    public static float maxHeliFromLoadSettings(int i)
+    {
+        int r = Mathf.RoundToInt(i / 100.0f * 20.0f);
+
+        return r;
 
     }
     public static float scrapFromLoadSettings(int i)

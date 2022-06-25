@@ -19,8 +19,6 @@ public class LoadCityBut : MonoBehaviour
     }
     public void ButtonPressed()
     {
-        //Debug.Log("button pressed id: " + iD);
-        // set persistant save ibjc info
         GameObject.Find("Persist").GetComponent<Persist>().forceLoad = iD;
         GameObject.Find("CubeCity").GetComponent<CubeCity>().ReloadCity();
     }
