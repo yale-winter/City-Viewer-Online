@@ -6,7 +6,7 @@ View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityvi
 ![city_viewer_1_2_blog](https://user-images.githubusercontent.com/5803874/173785430-926382bb-bb7a-44eb-b608-ba6f34af5251.jpg)
 
 ## Overview:
-Procedurally generate a city with skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives.
+Create a new City or load from Cities saved online. Cities are procedurally generated and have skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives.
 
 **Features:**
 - Cube primitives are procedurally instantiated, scaled and positioned as buildings for each block
