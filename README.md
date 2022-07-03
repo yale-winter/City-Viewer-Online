@@ -1,7 +1,7 @@
 # City-Viewer-Online
 WebGL, C#, SQL, PHP, Database, HTTP, Unity
 
-View City Viewer Online here: [City Viewer Online](https://yalewinter.com/cityviewer/ "City Viewer Online") (WebGL Browser from desktop)
+[City Viewer Online](https://yalewinter.com/cityviewer/ "View City Viewer Online Here (WebGL build for Browser from Mac or PC)")
 
 ![cityvieweronline](https://user-images.githubusercontent.com/5803874/177024785-370c7dbf-a606-440a-bc1c-ebb8407e8a87.JPG)
 
