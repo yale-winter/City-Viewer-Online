@@ -546,6 +546,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1440046713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8847278804365810365, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
+  m_PrefabInstance: {fileID: 1153061256927394117}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1478029982 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4231749223841291553, guid: c1d540f3587fd8c4aaad3cb9c5b797c1, type: 3}
@@ -581,6 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf78307bc1255ff4a8206b1f7b424ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadCityMenu: {fileID: 1440046713}
   mainCanvas: {fileID: 479424613}
   layoutCityButs: {fileID: 1878581268}
   loadCityBut: {fileID: 4738280308209314980, guid: 984dfd747e6bcdd44a8ec09df5b15941, type: 3}
@@ -685,6 +691,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1928683906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1928683907}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1928683907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928683906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1078, y: 539.3334, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1991916688 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3446761175627098784, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
@@ -978,6 +1014,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: CubeCity, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1416108867504229411, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1564004336}
+    - target: {fileID: 1416108867504229411, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenLoadCityMenuPressed
+      objectReference: {fileID: 0}
     - target: {fileID: 1447673779128042067, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -998,6 +1042,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1564004336}
+    - target: {fileID: 6819834655431670726, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8892966302010569126, guid: cd2d3268a421b9c428236b7d876f979b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

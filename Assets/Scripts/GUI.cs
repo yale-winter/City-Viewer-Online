@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class GUI : MonoBehaviour
 {
+
+    bool showingLoadMenu = false;
+    public GameObject loadCityMenu;
+
     public GameObject mainCanvas;
     public Transform layoutCityButs;
     public GameObject loadCityBut;
@@ -52,6 +56,8 @@ public class GUI : MonoBehaviour
 
     void Awake()
     {
+        loadCityMenu.SetActive(false);
+        showingLoadMenu = false;
         mainCanvas.SetActive(false);
         curCityNameExtra.text = "";
         aboveCityText.text = "";
@@ -209,8 +215,20 @@ public class GUI : MonoBehaviour
 
             }
             advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString() + " blocks";
-            advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString() + " helis";
-            advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString();
+            advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
+            advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + "% rate";
+        }
+    }
+    public void OpenLoadCityMenuPressed()
+    {
+        showingLoadMenu = !showingLoadMenu;
+        if (showingLoadMenu)
+        {
+            loadCityMenu.SetActive(true);
+        }
+        else
+        {
+            loadCityMenu.SetActive(false);
         }
     }
 
