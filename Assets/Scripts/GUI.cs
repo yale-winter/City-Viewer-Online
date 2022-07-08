@@ -101,7 +101,6 @@ public class GUI : MonoBehaviour
         if (showingCreateMenu)
         {
             RandomName();
-            createCityExpandBut.SetActive(false);
             createCityMenu.SetActive(true);
             Time.timeScale = 0.0f;
             pauseDarken.SetActive(true);
@@ -117,7 +116,6 @@ public class GUI : MonoBehaviour
         }
         else
         {
-            createCityExpandBut.SetActive(true);
             createCityMenu.SetActive(false);
             colorPickerP.SetActive(false);
             pauseDarken.SetActive(false);
