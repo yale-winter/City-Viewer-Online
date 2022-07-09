@@ -119,6 +119,7 @@ public class CubeCity : MonoBehaviour
         cameraMovingTarget.transform.parent = transform;
     }
     public int loadIndex = 0;
+    public float heightMod = 0.5f;
     public void CreateCubeCity(Scores data, bool loadOnline = true)
     {
         if (loadOnline)
@@ -129,6 +130,9 @@ public class CubeCity : MonoBehaviour
             superSkyScrapersAvgPerBlock = XHelpers.scrapFromLoadSettings(data.scrapers[loadIndex]);
             string loadColorStr = XHelpers.PadZeros(data.cityColor[loadIndex].ToString(), 9);
             mat.color = new Color32(byte.Parse(loadColorStr.Substring(0, 3)), byte.Parse(loadColorStr.Substring(3, 3)), byte.Parse(loadColorStr.Substring(6, 3)), 255);
+            carsMax = Mathf.RoundToInt(XHelpers.carsFromLoadSettings(data.cars[loadIndex]));
+            heightMod = XHelpers.heightFromLoadSettings(data.height[loadIndex]);
+
         }
 
         viewPos1 = new Vector3((((float)numCityBlocksXZ.x - 1.0f) * cityBlockSizeXZ.x) * 0.5f + cityBlockSizeXZ.x * 0.5f, 21.0f, ((float)numCityBlocksXZ.y * cityBlockSizeXZ.y) * -0.9f);
@@ -252,7 +256,7 @@ public class CubeCity : MonoBehaviour
                     GameObject instanceCityBlockGO = new GameObject("Parent City Block");
                     CityBlock instanceCB = instanceCityBlockGO.AddComponent<CityBlock>();
                     Vector2 instanceSetSize = new Vector2(cityBlockSizeXZ.x - roadBuffer, cityBlockSizeXZ.y - roadBuffer);
-                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this, false);
+                    instanceCB.SetUp(maxBuildingsInBlock, instanceSetSize, mat, this, false, heightMod);
                     allCityBlocks.Add(instanceCityBlockGO);
                     instanceCityBlockGO.transform.parent = parentCubeCity;
                     Vector3 setInstancePos = new Vector3(sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.XPos, 0.0F, sLMatrix[sIndxAdjList[0]].inRow[sIndxAdjList[1]].sLM.ZPos);

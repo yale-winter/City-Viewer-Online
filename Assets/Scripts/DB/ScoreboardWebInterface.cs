@@ -11,7 +11,7 @@ public class ScoreboardWebInterface : MonoBehaviour
     public string addScoreURL = "https://yalewinter.com/cityviewer/savecity.php?"; //be sure to add a ? to your url
     public string highscoreURL = "https://yalewinter.com/cityviewer/readcities.php";
 
-    int dataCols = 6;
+    int dataCols = 8;
 
     Scores scores;
     public Scores Scores => scores;
@@ -21,7 +21,7 @@ public class ScoreboardWebInterface : MonoBehaviour
     /// Supply it with a string representing the players name and the players score.
     /// can also hash and unhash info to confirm match (not used here)
     /// </summary>
-    public IEnumerator PostScores(string name, int score, int citySize, int helicopters, int scrapers, int height, int cars, int cityColor)
+    public IEnumerator PostScores(string name, int score, int citySize, int helicopters, int scrapers, int cityColor, int height, int cars)
     {
 
         string hash = name + score + citySize + helicopters + scrapers + height + cars + cityColor + secretKey;
@@ -84,8 +84,10 @@ public class ScoreboardWebInterface : MonoBehaviour
                     scores.helicopters[i] = int.Parse(rawScores[rawScoreIndex + 3]);
                     scores.scrapers[i] = int.Parse(rawScores[rawScoreIndex + 4]);
                     scores.cityColor[i] = int.Parse(rawScores[rawScoreIndex + 5]);
+                    scores.height[i] = int.Parse(rawScores[rawScoreIndex + 6]);
+                    scores.cars[i] = int.Parse(rawScores[rawScoreIndex + 7]);
 
-                rawScoreIndex += dataCols;
+                    rawScoreIndex += dataCols;
                 }
                 returnCode(0);
             }

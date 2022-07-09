@@ -193,7 +193,7 @@ public class GUI : MonoBehaviour
         Debug.Log("colorStr " + colorStr);
         int colorInt = int.Parse(colorStr);
         Debug.Log("colorInt " + colorInt);
-        scoreboard.SubmitCity(inputFieldName.text, (int)(sliders[0].value * 100.0f), (int)(sliders[1].value * 100.0f), (int)(sliders[2].value * 100.0f), (int)(sliders[3].value * 100.0f), (int)(sliders[4].value * 100.0f), colorInt);
+        scoreboard.SubmitCity(inputFieldName.text, (int)(sliders[0].value * 100.0f), (int)(sliders[1].value * 100.0f), (int)(sliders[2].value * 100.0f), colorInt, (int)(sliders[3].value * 100.0f), (int)(sliders[4].value * 100.0f));
     }
     static string PadZeros(string str, int setChars)
     {
@@ -212,11 +212,11 @@ public class GUI : MonoBehaviour
                sliders[0].value = Mathf.RoundToInt(sliders[0].value * 5.0f) / 5.0f;
 
             }
-            advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString() + " blocks";
-            advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
-            advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + "% rate";
-            advText[3].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + "% max";
-            advText[4].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + " cars";
+            advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString() + " city blocks";
+            advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString() + " max";
+            advText[2].text = "";// XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 10000.0f)).ToString() + "% rate";
+            advText[3].text = "";// XHelpers.heightFromLoadSettings(Mathf.RoundToInt(sliders[3].value * 10000.0f)).ToString() + "% max";
+            advText[4].text = XHelpers.carsFromLoadSettings(Mathf.RoundToInt(sliders[4].value * 100.0f)).ToString() + " max";
         }
     }
     public void OpenLoadCityMenuPressed()

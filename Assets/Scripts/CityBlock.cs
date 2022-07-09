@@ -23,8 +23,10 @@ public class CityBlock : MonoBehaviour
     [Tooltip("helicopter path start objects")]
     public List<Transform> heliPathRefGOs = new List<Transform>();
 
-    public void SetUp(int maxBuildings, Vector2 instanceSize, Material setMat, CubeCity setCubeCity, bool setMultiTone)
+    private float heightMod = 0.5f;
+    public void SetUp(int maxBuildings, Vector2 instanceSize, Material setMat, CubeCity setCubeCity, bool setMultiTone, float setHeightMod)
     {
+        heightMod = setHeightMod;
         multiTone = setMultiTone;
         buildingsCurMax[1] = maxBuildings;
         blockSize = new Vector2(instanceSize[0], instanceSize[1]);
@@ -48,13 +50,11 @@ public class CityBlock : MonoBehaviour
     {
         blockParent = new GameObject("Parent Buildings").transform;
         blockParent.parent = transform;
-
-        float startX = transform.position.x - blockSize.x * 0.5F + useWidth * 0.5F;
-        //
-        float curX = transform.position.x - blockSize.x * 0.5F + useWidth * 0.5F;
-        float endX = transform.position.x + blockSize.x * 0.5F;
-        float startZ = transform.position.z - blockSize.y * 0.5F;
-        float endZ = transform.position.z + blockSize.y * 0.5F;
+        float startX = transform.position.x - blockSize.x * 0.5f + useWidth * 0.5f;
+        float curX = transform.position.x - blockSize.x * 0.5f + useWidth * 0.5f;
+        float endX = transform.position.x + blockSize.x * 0.5f;
+        float startZ = transform.position.z - blockSize.y * 0.5f;
+        float endZ = transform.position.z + blockSize.y * 0.5f;
         float curZ = startZ;
         while (curX < endX && buildingsCurMax[0] < buildingsCurMax[1])
         {
@@ -82,13 +82,13 @@ public class CityBlock : MonoBehaviour
                     length = endZ - curZ;
                 }
 
-                float buildingHeight = Random.Range(1.0F, 4.0F);
+                float buildingHeight = Mathf.RoundToInt(Random.Range(1.0F, 4.0F));
                 float roll = Random.value;
                 string typeStr = "Apartment Building";
                 if (roll > 0.85F)
                 {
                     typeStr = "Sky Scraper Building";
-                    buildingHeight = Random.Range(5.0F, 10.0F);
+                    buildingHeight = Mathf.RoundToInt(Random.Range(5.0f, 6.0f + 4.0f* heightMod));
                 }
 
                 int totalBlocks = Mathf.RoundToInt(cubeCity.cityBlockSizeXZ.x * cubeCity.cityBlockSizeXZ.y);
@@ -104,7 +104,7 @@ public class CityBlock : MonoBehaviour
                             instanceBC.isTrigger = true;
                             sSSHere.Add(building.gameObject);
                             cubeCity.superSkyScrapers.Add(building.gameObject);
-                            buildingHeight = Random.Range(16.0F, 22.0F);
+                            buildingHeight = Mathf.RoundToInt(Random.Range(8.0f + 8.0f* heightMod, 9.0f + 13.0f* heightMod));
                             useWidth = superSkyWidth;
 
                             for (int i = 0; i < 2; i++)
@@ -116,7 +116,7 @@ public class CityBlock : MonoBehaviour
                                 instanceHeliLoopGO.transform.name = "possible heli loop";
                                 float yPos = Random.Range(0.2F, 0.7F);
                                 float moreXZ = Random.Range(5.1F, 5.3F);
-                                instanceHeliLoopGO.transform.localPosition = new Vector3(0.0F, yPos, 0.0F);
+                                instanceHeliLoopGO.transform.localPosition = new Vector3(0.0f, yPos, 0.0f);
                                 instanceHeliLoopGO.transform.localScale = new Vector3(instanceHeliLoopGO.transform.localScale.x* moreXZ, instanceHeliLoopGO.transform.localScale.y*0.08F, instanceHeliLoopGO.transform.localScale.z* moreXZ);
                                 float noiseScale = Random.Range(0.0F, 3.5F);
                                 float rotateFullyHere = Random.Range(0.0F, 360.0F);
@@ -129,7 +129,7 @@ public class CityBlock : MonoBehaviour
 
                 building.transform.name = typeStr + buildingsCurMax[0];
                 building.transform.localScale = new Vector3(useWidth, buildingHeight, length);
-                building.transform.position = new Vector3(curX, buildingHeight/2.0F, curZ + length * 0.5F);
+                building.transform.position = new Vector3(curX, buildingHeight/2.0f, curZ + length * 0.5f);
                 curZ += length;
                 // reset useWidth
                 useWidth = defaultUseWidth;

@@ -38,10 +38,7 @@ public static class XHelpers
     }
     public static float maxHeliFromLoadSettings(int i)
     {
-        int r = Mathf.RoundToInt(i / 100.0f * 20.0f);
-
-        return r;
-
+        return Mathf.RoundToInt(i / 100.0f * 20.0f);
     }
     public static float scrapFromLoadSettings(int i)
     {
@@ -55,7 +52,7 @@ public static class XHelpers
     }
     public static float carsFromLoadSettings(int i)
     {
-        return Mathf.Max(0.01f, i / 100.0f);
+        return Mathf.RoundToInt(i / 100.0f * 15.0f) + 5;
 
     }
     public static string PadZeros(string str, int setChars)

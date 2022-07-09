@@ -46,6 +46,8 @@ public class Scoreboard : MonoBehaviour
                 scores.helicopters[i] = scoreboardWebInterface.Scores.helicopters[i];
                 scores.scrapers[i] = scoreboardWebInterface.Scores.scrapers[i];
                 scores.cityColor[i] = scoreboardWebInterface.Scores.cityColor[i];
+                scores.height[i] = scoreboardWebInterface.Scores.height[i];
+                scores.cars[i] = scoreboardWebInterface.Scores.cars[i];
             }
         }
         else if (returnCode == 1)
@@ -77,20 +79,17 @@ public class Scoreboard : MonoBehaviour
     private bool scoresLoaded = false;
     public void Start()
     {
-
-        
         if (!scoresLoaded)
         {
             scoresLoaded = true;
             StartCoroutine("LoadScores");
-
         }
     }
-    public void SubmitCity(string name, int citySize, int helicopters, int scrapers, int height, int cars, int cityColor)
+    public void SubmitCity(string name, int citySize, int helicopters, int scrapers, int cityColor, int height, int cars)
     {
         if (!scoresSubmitted)
         {
-            StartCoroutine(scoreboardWebInterface.PostScores(name, 0, citySize, helicopters, scrapers, height, cars, cityColor));
+            StartCoroutine(scoreboardWebInterface.PostScores(name, 0, citySize, helicopters, scrapers, cityColor, height, cars));
             scoresSubmitted = true;
         }
     }

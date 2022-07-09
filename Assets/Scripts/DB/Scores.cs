@@ -6,10 +6,10 @@ public class Scores : MonoBehaviour
 {
     public string[] names = new string[8];
     public int[] scores = new int[8];
-    //
     public int[] citySize = new int[8];
     public int[] helicopters = new int[8];
     public int[] scrapers = new int[8];
     public int[] cityColor = new int[8];
-
+    public int[] height = new int[8];
+    public int[] cars = new int[8];
 }
