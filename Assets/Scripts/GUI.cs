@@ -26,7 +26,7 @@ public class GUI : MonoBehaviour
     public Image customColorSwatch;
     float nudgeAmount = 0.1F;
     /// <summary>
-    /// slider 0 = size, 1 = helis, 2 = scrapers
+    /// slider 0 = size, 1 = helis, 2 = scrapers, 3 = height, 4 = cars
     /// </summary>
     public List<Slider> sliders = new List<Slider>();
 
@@ -193,7 +193,7 @@ public class GUI : MonoBehaviour
         Debug.Log("colorStr " + colorStr);
         int colorInt = int.Parse(colorStr);
         Debug.Log("colorInt " + colorInt);
-        scoreboard.SubmitCity(inputFieldName.text, (int)(sliders[0].value * 100.0f), (int)(sliders[1].value * 100.0f), (int)(sliders[2].value * 100.0f), colorInt);
+        scoreboard.SubmitCity(inputFieldName.text, (int)(sliders[0].value * 100.0f), (int)(sliders[1].value * 100.0f), (int)(sliders[2].value * 100.0f), (int)(sliders[3].value * 100.0f), (int)(sliders[4].value * 100.0f), colorInt);
     }
     static string PadZeros(string str, int setChars)
     {
@@ -215,6 +215,8 @@ public class GUI : MonoBehaviour
             advText[0].text = XHelpers.sizeFromLoadSettings(Mathf.RoundToInt(sliders[0].value * 100.0f)).ToString() + " blocks";
             advText[1].text = XHelpers.maxHeliFromLoadSettings(Mathf.RoundToInt(sliders[1].value * 100.0f)).ToString();
             advText[2].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + "% rate";
+            advText[3].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + "% max";
+            advText[4].text = XHelpers.scrapFromLoadSettings(Mathf.RoundToInt(sliders[2].value * 100.0f)).ToString() + " cars";
         }
     }
     public void OpenLoadCityMenuPressed()

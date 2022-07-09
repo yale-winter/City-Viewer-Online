@@ -86,11 +86,11 @@ public class Scoreboard : MonoBehaviour
 
         }
     }
-    public void SubmitCity(string name, int citySize, int helicopters, int scrapers, int cityColor)
+    public void SubmitCity(string name, int citySize, int helicopters, int scrapers, int height, int cars, int cityColor)
     {
         if (!scoresSubmitted)
         {
-            StartCoroutine(scoreboardWebInterface.PostScores(name, 0, citySize, helicopters, scrapers, cityColor));
+            StartCoroutine(scoreboardWebInterface.PostScores(name, 0, citySize, helicopters, scrapers, height, cars, cityColor));
             scoresSubmitted = true;
         }
     }

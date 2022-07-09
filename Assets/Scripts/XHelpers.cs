@@ -48,6 +48,16 @@ public static class XHelpers
         return Mathf.Max(0.01f, i / 100.0f);
 
     }
+    public static float heightFromLoadSettings(int i)
+    {
+        return Mathf.Max(0.01f, i / 100.0f);
+
+    }
+    public static float carsFromLoadSettings(int i)
+    {
+        return Mathf.Max(0.01f, i / 100.0f);
+
+    }
     public static string PadZeros(string str, int setChars)
     {
         while (str.Length < setChars)

@@ -21,11 +21,11 @@ public class ScoreboardWebInterface : MonoBehaviour
     /// Supply it with a string representing the players name and the players score.
     /// can also hash and unhash info to confirm match (not used here)
     /// </summary>
-    public IEnumerator PostScores(string name, int score, int citySize, int helicopters, int scrapers, int cityColor)
+    public IEnumerator PostScores(string name, int score, int citySize, int helicopters, int scrapers, int height, int cars, int cityColor)
     {
 
-        string hash = name + score + citySize + helicopters + scrapers + cityColor + secretKey;
-        string post_url = addScoreURL + "name=" + UnityWebRequest.EscapeURL(name) + "&score=" + score + "&citySize=" + citySize + "&helicopters=" + helicopters + "&scrapers=" + scrapers + "&cityColor=" + cityColor + "&hash=" + hash;
+        string hash = name + score + citySize + helicopters + scrapers + height + cars + cityColor + secretKey;
+        string post_url = addScoreURL + "name=" + UnityWebRequest.EscapeURL(name) + "&score=" + score + "&citySize=" + citySize + "&helicopters=" + helicopters + "&scrapers=" + scrapers + "&cityColor=" + cityColor + "&height=" + height + "&cars=" + cars + "&hash=" + hash;
         // Post the URL to the site and create a download object to get the result.
         Debug.Log("Submitting score");
         WWWForm form = new WWWForm();
