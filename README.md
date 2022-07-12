@@ -1,5 +1,5 @@
 # City-Viewer-Online
-WebGL, C#, SQL, PHP, Database, HTTP, Unity, REST
+WebGL, C#, SQL, PHP, Database, HTTP, Unity
 
 [View City Viewer Online Here (WebGL build for Browser from Mac or PC)](https://yalewinter.com/cityviewer/)
 
