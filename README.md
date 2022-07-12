@@ -20,7 +20,8 @@ Create a new City or load from Cities saved online. Cities are procedurally gene
 
 ## Implementation
 ![Cube City diagram](https://user-images.githubusercontent.com/5803874/156256669-fc3db5f4-8708-4918-bf10-ecfbf9ab4b22.jpg)
-(this diagram is now outdated but included as a reference point)
+
+*The diagram above is now outdated but included as a reference point*
 
 - Most of the implementation details are outline out in the Diagram above
 - Some different design patterns are used where appropriate including Model View Controller
