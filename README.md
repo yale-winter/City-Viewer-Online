@@ -26,8 +26,8 @@ Create a new City or load from Cities saved online. Cities are procedurally gene
 - Most of the implementation details are outline out in the Diagram above
 - Some different design patterns are used where appropriate including Model View Controller
 - Very few objects and scripts in the base scene (easily move canvas elements to a prefab to instantiated to reduce further, left in for ease of updates)
-- The Player can dynamically set city attributes such as the size of city blocks in X, Z, average number of Helicopters per block, etc
+- The Player can dynamically set city attributes such as the size of city blocks in X, Z, number of helicopters, city color, etc
 - Helicopter possible paths are discarded if they fly through buildings
-- Adapts from Bezier Path Creator free Asset Store Package for the Helicopter paths, and Boxophobic for the sky box image
+- Adapts from Bezier Path Creator free Asset Store Package for the helicopter paths, and Boxophobic for the sky box image
 - Cars stop at stoplights with waiting coroutines getting delay info from stoplight
 - Switch between the different camera views to see the city, follow helicopters, or follow cars
