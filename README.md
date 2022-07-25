@@ -5,8 +5,11 @@ WebGL, C#, SQL, PHP, Database, HTTP, Unity
 
 ![city-viewer-online-screenshot](https://user-images.githubusercontent.com/5803874/178402932-6e00a948-c27d-4bc9-a0b0-0477fc079663.jpg)
 
+![city_viewer_online_cover](https://user-images.githubusercontent.com/5803874/180682434-d539d3f2-0831-4a4a-8c79-445dd764289c.JPG)
+^ Custom AI created Movie Poster for City Viewer Online
+
 ## Overview:
-Create a new City or load from Cities saved online. Cities are procedurally generated and have skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives.
+Create a new City or load from Cities saved online. Cities are procedurally generated and have skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives. Art images are created with AI tools.
 
 **Features:**
 - Cube primitives are procedurally instantiated, scaled and positioned as buildings for each block
