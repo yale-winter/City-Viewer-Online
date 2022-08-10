@@ -1,13 +1,7 @@
 # City-Viewer-Online
 WebGL, C#, SQL, PHP, Database, HTTP, Unity
 
-[View City Viewer Online Here (WebGL Browser for Mac or PC)](https://yalewinter.com/cityviewer/)
-
 ![city-viewer-online-screenshot](https://user-images.githubusercontent.com/5803874/178402932-6e00a948-c27d-4bc9-a0b0-0477fc079663.jpg)
-
-![city_viewer_online_cover](https://user-images.githubusercontent.com/5803874/180682434-d539d3f2-0831-4a4a-8c79-445dd764289c.JPG)
-
-^ custom AI created promotional artwork for City Viewer Online
 
 ## Overview:
 Create a new City or load from Cities saved online. Cities are procedurally generated and have skyscrapers, roads, cars, stoplights, and helicopters. Using no art assets only scaled cube primitives. Art images are created with AI tools.
